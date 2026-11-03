@@ -101,3 +101,18 @@ Script `scripts/viec4_phi.py` (đặt `rsi.PHI` trước khi nạp; phí tính v
 | MỐC vòng 30 phí 0,10% | −119 (45%) | +75 (37%) | +277 (25%) | +208 (27%) | +1948 (20%) | +2389 | 5.156 (49%) | 473 |
 | MỐC vòng 30 phí 0,15% | −114 (43%) | +138 (32%) | +25 (33%) | +202 (25%) | +2501 (12%) | +2752 | 6.119 (43%) | 465 |
 **Kết luận việc 4:** hệ **còn lãi** khi phí 0,10–0,15% (cộng 5 năm +3.830…+4.288 USD với MỐC-1), nhưng **nhạy phí**: lãi kép giảm ~3,5 lần (90,8k → 25,3k / 20,8k), sụt tăng lên 44–45%, **năm 2022 chuyển sang lỗ** (−119/−120). Phí 0,15% không tệ hơn 0,10% là do ngưỡng điểm/lệnh chọn thay đổi theo phí (nhiễu chọn lệnh), không phải phí cao tốt hơn. MỐC-1 vẫn hơn MỐC vòng 30 ở mọi mức phí → việc 1 bền với phí. Trước khi chạy thật cần đo spread + phí ETH thật trên Exness (nếu > 0,1%/lệnh thì kỳ vọng thấp hơn nhiều).
+
+## Việc 5 — Lọc biến động thấp (ATR14 D1 / giá)
+Script `scripts/viec5_bien_dong.py` (thêm hệ số rủi ro riêng từng lệnh `hs` vào `scripts/von500.py`, mặc định 1 → không đổi kết quả cũ). ATR% D1 TB theo năm: 2018 9,0 · 2019 6,3 · 2020 6,8 · 2021 8,5 · 2022 6,8 · **2023 3,6** · 2024 5,0 · 2025 5,9 · 2026 4,5.
+**Chọn ngưỡng trên 2018–21** (tín hiệu H1 có dữ liệu từ 2018: RSI 55 MUA H1, BÁN H1 khi H4 vừa cắt xuống, MUA H1 khi H4 vừa cắt lên): ATR% < 3,5–4,5% rất hiếm ở 2018–21 (41–162 lệnh) và R/lệnh nhóm dưới ngưỡng **dương** (+0,47…+2,6R) → dữ liệu cũ **không ủng hộ** việc nghỉ khi biến động thấp; R xấu nằm ở nhóm biến động CAO (> 8%: −0,15R/l ở 2018–21, −0,19R/l ở 2022–26). Kiểm tra 2022–26 cũng vậy: ATR < 3% +0,24R/l, 3–3,5% +0,73R/l (cao nhất).
+**Vẫn thử áp lên MỐC-1 để chắc chắn:**
+| Bản | 2022 | 2023 | 2024 | 2025 | 2026 | Cộng 5 năm | Lãi kép 500 từ 2022 (sụt) | Lệnh |
+|---|---|---|---|---|---|---|---|---|
+| MỐC-1 | +256 (27%) | +446 (33%) | +884 (25%) | +750 (29%) | +2865 (25%) | +5201 | 90.792 (33%) | 491 |
+| nghỉ khi ATR% < 3% | +291 (24%) | +175 (23%) | +913 (25%) | +750 (29%) | +451 (23%) | +2580 | 18.857 (33%) | 446 |
+| rủi ro ½ khi ATR% < 3% | +273 | +295 | +912 | +750 | +1604 | +3834 | 53.867 (33%) | 491 |
+| nghỉ khi ATR% < 3,5% | +321 (21%) | −55 (24%) | +559 (19%) | +750 | −33 (31%) | +1542 | 4.237 (41%) | 398 |
+| rủi ro ½ khi ATR% < 3,5% | +286 | +91 | +602 | +750 | +918 | +2647 | 24.305 (32%) | 491 |
+| nghỉ khi ATR% < 4% | +400 (20%) | −56 | −42 | +507 | −3 | +806 | 1.465 (46%) | 323 |
+| rủi ro ½ khi ATR% < 4,5% | +379 (16%) | +251 (16%) | +210 (17%) | +261 (27%) | +814 (23%) | +1915 | 10.658 (31%) | 491 |
+**Kết luận việc 5: BỎ.** Lọc biến động thấp làm kém mốc ở mọi ngưỡng (cộng 5 năm giảm 1.400–4.900 USD). Lý do: sóng tăng lớn tháng 8/2026 (lệnh +20…+30R) bắt đầu khi ATR% D1 thấp — biến động thấp thường là lúc **nén trước sóng**. Ở 2023 hệ đã lãi nhờ lọc top 30% nên lọc thêm chỉ cắt lệnh tốt. Mặt tốt duy nhất: rủi ro ½ khi ATR < 4–4,5% giảm sụt vài năm (16–20%) nhưng mất 55–80% lãi. Hướng ngược lại (giảm rủi ro khi ATR% D1 > 8%) có dấu hiệu ở cả 2 giai đoạn nhưng chưa kiểm chứng.

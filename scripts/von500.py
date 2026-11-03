@@ -13,7 +13,7 @@ def mo_phong(L,sym,von=500.0,rr=2.0,tran=4.0):
   b=von; pk=von; dd=0; mo_={}; bo=0; n=0; thang={}
   for t,loai,x in ev:
     if loai==0:
-      r=rr*(1.5 if x['sec']>=14400 else 1)/100*b
+      r=rr*(1.5 if x['sec']>=14400 else 1)*x.get('hs',1.0)/100*b   # hs: he so rui ro rieng tung lenh (viec cloud 5)
       lot=int(r/x['kc']/buoc)*buoc
       if lot<mn:
         if mn*x['kc']>tran/100*b: bo+=1; continue
