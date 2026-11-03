@@ -46,3 +46,8 @@ print("\n=== Ap len MOC-1\n"+TIEU_DE); print(dong('MOC-1',danh_gia(G)))
 for th in (3,3.5,4,4.5):
   print(dong(f'NGHI khi ATR% D1 < {th}%',danh_gia([x for x in G if x['atrd']>=th])))
   print(dong(f'rui ro 1/2 khi ATR% D1 < {th}%',danh_gia([dict(x,hs=0.5 if x['atrd']<th else 1.0) for x in G])),flush=True)
+# 5b: chieu nguoc lai - bien dong CAO (nhom > 8% R am ca 2018-21 va 2022-26)
+print("\n=== 5b: giam rui ro / nghi khi ATR% D1 CAO")
+for th in (7,8,9):
+  print(dong(f'rui ro 1/2 khi ATR% D1 > {th}%',danh_gia([dict(x,hs=0.5 if x['atrd']>th else 1.0) for x in G])))
+  print(dong(f'NGHI khi ATR% D1 > {th}%',danh_gia([x for x in G if x['atrd']<=th])),flush=True)

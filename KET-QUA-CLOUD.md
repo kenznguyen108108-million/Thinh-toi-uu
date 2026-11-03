@@ -116,3 +116,12 @@ Script `scripts/viec5_bien_dong.py` (thêm hệ số rủi ro riêng từng lệ
 | nghỉ khi ATR% < 4% | +400 (20%) | −56 | −42 | +507 | −3 | +806 | 1.465 (46%) | 323 |
 | rủi ro ½ khi ATR% < 4,5% | +379 (16%) | +251 (16%) | +210 (17%) | +261 (27%) | +814 (23%) | +1915 | 10.658 (31%) | 491 |
 **Kết luận việc 5: BỎ.** Lọc biến động thấp làm kém mốc ở mọi ngưỡng (cộng 5 năm giảm 1.400–4.900 USD). Lý do: sóng tăng lớn tháng 8/2026 (lệnh +20…+30R) bắt đầu khi ATR% D1 thấp — biến động thấp thường là lúc **nén trước sóng**. Ở 2023 hệ đã lãi nhờ lọc top 30% nên lọc thêm chỉ cắt lệnh tốt. Mặt tốt duy nhất: rủi ro ½ khi ATR < 4–4,5% giảm sụt vài năm (16–20%) nhưng mất 55–80% lãi. Hướng ngược lại (giảm rủi ro khi ATR% D1 > 8%) có dấu hiệu ở cả 2 giai đoạn nhưng chưa kiểm chứng.
+**5b — chiều ngược lại (biến động CAO, ngưỡng 8% lấy từ nhóm R âm ở 2018–21):**
+| Bản | 2022 | 2023 | 2024 | 2025 | 2026 | Cộng 5 năm | Lãi kép 500 từ 2022 (sụt) | Lệnh |
+|---|---|---|---|---|---|---|---|---|
+| MỐC-1 | +256 (27%) | +446 (33%) | +884 (25%) | +750 (29%) | +2865 (25%) | +5201 | 90.792 (33%) | 491 |
+| rủi ro ½ khi ATR% > 7% | +283 (24%) | +446 | +884 | +746 (29%) | +2865 | +5224 | 94.092 (32%) | 491 |
+| rủi ro ½ khi ATR% > 8% | +356 (25%) | +446 | +886 | +743 (31%) | +2865 | +5296 | 103.078 (35%) | 491 |
+| nghỉ khi ATR% > 8% | +361 (24%) | +446 | +888 | +603 (32%) | +2865 | +5163 | 104.445 (35%) | 470 |
+| rủi ro ½ khi ATR% > 9% | +332 (25%) | +446 | +884 | +792 (26%) | +2865 | +5319 | 107.498 (33%) | 491 |
+→ Hướng đúng (lân cận 7/8/9% đều ≥ mốc về tiền, đúng ý "bảo vệ tài khoản khi thị trường khùng") nhưng **tác động nhỏ** (chỉ chạm vài lệnh năm 2022/2025, +2…+18% lãi kép) và sụt lãi kép ở ngưỡng 8% lại tăng 33 → 35% → **chưa đưa vào MỐC** (nằm trong nhiễu); ghi lại làm ứng viên phòng thủ.
