@@ -89,3 +89,15 @@ Script `scripts/viec3_nguong.py`.
 | MỐC-1 (ngưỡng cố định) | +446 (33%) | +884 (25%) | +750 (29%) | +2865 (25%) | +4945 | 55.320 (33%) | 410 |
 | Không lọc điểm (tất cả) | +42 (69%) | +1632 (42%) | +59 (58%) | +2311 (43%) | +4044 | 13.559 (69%) | 1236 |
 **Kết luận việc 3 (mặt xấu quan trọng):** ngưỡng chất lượng **KHÔNG bền**. Đổi top 30% → 25% làm 2022 từ lãi thành lỗ; 35% lãi nhiều hơn nhưng sụt 49%. Khi làm walk-forward thật, năm 2023 chỉ +46 USD với sụt 58% (MỐC +446 / 33%) và 2025 chỉ +51 (MỐC +750) → **kết quả đẹp của MỐC ở 2023 có phần do mô hình điểm đã học trên chính năm 2023** (học trước 2024), và năm 2025 nhạy với ngưỡng. Kỳ vọng thực tế nên lấy theo dòng WF: lãi kép từ 2023 ~10.000 USD với sụt ~58%, không phải 55.000 / 33%. Lọc điểm vẫn giảm sụt so với không lọc (58% so với 69%) nhưng lợi nhuận tương đương. **Không đổi MỐC** (giữ top 30% cố định để so các việc sau), nhưng **không nên tin con số lãi kép của MỐC** khi quyết định tiền thật; nếu chạy thật nên cân nhắc rủi ro thấp hơn 3%.
+
+## Việc 4 — Phí/spread nặng hơn
+Script `scripts/viec4_phi.py` (đặt `rsi.PHI` trước khi nạp; phí tính vào mọi chỗ ra R, kể cả mô hình điểm → ngưỡng top 30% tính lại theo phí).
+| Bản | 2022 | 2023 | 2024 | 2025 | 2026 | Cộng 5 năm | Lãi kép 500 từ 2022 (sụt) | Lệnh |
+|---|---|---|---|---|---|---|---|---|
+| MỐC-1 phí 0,06% | +256 (27%) | +446 (33%) | +884 (25%) | +750 (29%) | +2865 (25%) | +5201 | 90.792 (33%) | 491 |
+| MỐC-1 phí 0,10% | **−119** (45%) | +260 (35%) | +961 (22%) | +382 (32%) | +2804 (20%) | +4288 | 25.308 (45%) | 493 |
+| MỐC-1 phí 0,15% | **−120** (44%) | +325 (30%) | +508 (21%) | +499 (33%) | +2618 (12%) | +3830 | 20.802 (44%) | 482 |
+| MỐC vòng 30 phí 0,06% | +257 (27%) | +257 (34%) | +331 (26%) | +387 (24%) | +2260 (25%) | +3492 | 23.250 (34%) | 464 |
+| MỐC vòng 30 phí 0,10% | −119 (45%) | +75 (37%) | +277 (25%) | +208 (27%) | +1948 (20%) | +2389 | 5.156 (49%) | 473 |
+| MỐC vòng 30 phí 0,15% | −114 (43%) | +138 (32%) | +25 (33%) | +202 (25%) | +2501 (12%) | +2752 | 6.119 (43%) | 465 |
+**Kết luận việc 4:** hệ **còn lãi** khi phí 0,10–0,15% (cộng 5 năm +3.830…+4.288 USD với MỐC-1), nhưng **nhạy phí**: lãi kép giảm ~3,5 lần (90,8k → 25,3k / 20,8k), sụt tăng lên 44–45%, **năm 2022 chuyển sang lỗ** (−119/−120). Phí 0,15% không tệ hơn 0,10% là do ngưỡng điểm/lệnh chọn thay đổi theo phí (nhiễu chọn lệnh), không phải phí cao tốt hơn. MỐC-1 vẫn hơn MỐC vòng 30 ở mọi mức phí → việc 1 bền với phí. Trước khi chạy thật cần đo spread + phí ETH thật trên Exness (nếu > 0,1%/lệnh thì kỳ vọng thấp hơn nhiều).
