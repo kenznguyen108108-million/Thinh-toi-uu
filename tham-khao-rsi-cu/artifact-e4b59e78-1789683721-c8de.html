@@ -1,0 +1,1308 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>ThinhTrading EA v2.6</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root {
+  --bg:#EEF1F5; --surface:#FFFFFF; --surface2:#F6F8FA;
+  --ink:#141D27; --muted:#5C6B7A; --line:#D9E0E8;
+  --accent:#A8480F; --accent-soft:#F3E2D6;
+  --pos:#1F6B4A; --neg:#9B2C2C;
+  --code-bg:#151C24; --code-ink:#DCE4EC;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:#0D1219; --surface:#151C25; --surface2:#1B242F;
+    --ink:#E3EAF1; --muted:#8B9BAB; --line:#273240;
+    --accent:#E58A42; --accent-soft:#33241A;
+    --pos:#4FB587; --neg:#E07070;
+    --code-bg:#0A0F15; --code-ink:#DCE4EC;
+  }
+}
+:root[data-theme="dark"] {
+  --bg:#0D1219; --surface:#151C25; --surface2:#1B242F;
+  --ink:#E3EAF1; --muted:#8B9BAB; --line:#273240;
+  --accent:#E58A42; --accent-soft:#33241A;
+  --pos:#4FB587; --neg:#E07070;
+  --code-bg:#0A0F15; --code-ink:#DCE4EC;
+}
+* { box-sizing:border-box; }
+body {
+  background:var(--bg); color:var(--ink);
+  font-family:"IBM Plex Sans", system-ui, -apple-system, sans-serif;
+  font-size:15px; line-height:1.6; margin:0;
+}
+.wrap { max-width:880px; margin:0 auto; padding:0 16px; padding-block:40px 64px; }
+.mono { font-family:"IBM Plex Mono", ui-monospace, Menlo, monospace; }
+header h1 { font-size:28px; line-height:1.2; margin:0 0 6px; letter-spacing:-.02em; text-wrap:balance; }
+header p.sub { color:var(--muted); margin:0 0 22px; }
+.chips { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:34px; }
+.chip { font-family:"IBM Plex Mono", monospace; font-size:12px;
+  background:var(--surface); border:1px solid var(--line); border-radius:3px;
+  padding:5px 9px; color:var(--muted); }
+.chip b { color:var(--ink); font-weight:600; }
+h2 { font-size:12px; text-transform:uppercase; letter-spacing:.09em;
+  color:var(--muted); font-weight:600; margin:38px 0 12px;
+  padding-bottom:7px; border-bottom:1px solid var(--line); }
+h2:first-of-type { margin-top:0; }
+table { width:100%; border-collapse:collapse; font-size:14px; }
+th { text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:.06em;
+  color:var(--muted); font-weight:600; padding:6px 10px; border-bottom:1px solid var(--line); }
+td { padding:7px 10px; border-bottom:1px solid var(--line); vertical-align:top; }
+tr:last-child td { border-bottom:none; }
+.num { text-align:right; font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono", monospace; }
+.pos { color:var(--pos); font-weight:600; }
+.neg { color:var(--neg); }
+.panel { background:var(--surface); border:1px solid var(--line); border-radius:5px; overflow:hidden; }
+.scroll { overflow-x:auto; }
+.cfg { display:grid; grid-template-columns:auto 1fr; }
+.cfg > div { padding:9px 14px; border-bottom:1px solid var(--line); }
+.cfg > div:nth-child(2n+1) { color:var(--muted); font-size:13px; white-space:nowrap; }
+.cfg > div:nth-last-child(-n+2) { border-bottom:none; }
+@media (max-width:520px) {
+  .cfg { grid-template-columns:1fr; }
+  .cfg > div:nth-child(2n+1) { border-bottom:none; padding-bottom:0; font-size:11px;
+     text-transform:uppercase; letter-spacing:.06em; }
+}
+.codehead { position:sticky; top:env(safe-area-inset-top, 0px); z-index:5;
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  background:var(--surface); border:1px solid var(--line); border-bottom:none;
+  border-radius:5px 5px 0 0; padding:10px 14px; }
+.codehead span { font-family:"IBM Plex Mono", monospace; font-size:12px; color:var(--muted); }
+button.copy { font-family:"IBM Plex Sans", sans-serif; font-size:13px; font-weight:600;
+  background:var(--accent); color:#fff; border:none; border-radius:4px;
+  padding:8px 16px; cursor:pointer; }
+button.copy:hover { filter:brightness(1.08); }
+button.copy:focus-visible { outline:2px solid var(--ink); outline-offset:2px; }
+button.copy.done { background:var(--pos); }
+pre { margin:0; background:var(--code-bg); color:var(--code-ink);
+  border:1px solid var(--line); border-radius:0 0 5px 5px;
+  padding:16px; overflow-x:auto; max-height:60vh; overflow-y:auto;
+  font-family:"IBM Plex Mono", monospace; font-size:12px; line-height:1.55; }
+.note { color:var(--muted); font-size:13.5px; margin:10px 0 0; }
+.warn { background:var(--surface); border:1px solid var(--line);
+  border-left:3px solid var(--accent); border-radius:4px; padding:12px 16px; margin-top:14px; }
+.warn p { margin:0; font-size:14px; }
+.warn p + p { margin-top:8px; }
+ol.steps { margin:0; padding-left:20px; }
+ol.steps li { margin-bottom:7px; }
+@media (prefers-reduced-motion:reduce) { * { transition:none !important; } }
+</style>
+
+<div class="wrap">
+<header>
+  <h1>ThinhTrading EA v2.6</h1>
+  <p class="sub">Viet lai toan bo khoi BAN: tin hieu tu khung lon + bat buoc che do giam. Chieu mua khong doi mot dong.</p>
+  <div class="chips">
+    <span class="chip">Chieu mua <b>giu nguyen</b></span>
+    <span class="chip">Tin hieu ban <b>tu khung lon</b></span>
+    <span class="chip">Che do giam <b>D1 + W1</b></span>
+    <span class="chip">Rui ro ban <b>0.5%</b></span>
+    <span class="chip">Magic ban <b>rieng</b></span>
+  </div>
+</header>
+
+<div class="warn">
+  <p><b>Doc truoc khi chay tien that:</b> chieu ban <b>chua duoc chung minh</b>. Walk-forward cho +0.181R/lenh nhung chi <b>0.7 SE</b> &mdash; muon du 2 SE can khoang 990 lenh, tuc ~50 nam du lieu. BTC chua ton tai du lau.</p>
+  <p>Ly do van bat no: no <b>khong lam hong chieu mua</b> (sut von gan nhu khong doi) va chay that la cach duy nhat con lai de lay them bang chung. <b>Chay DEMO truoc</b>, giu rui ro ban 0.5%.</p>
+  <p>No <b>khong phai cai phao</b>: tuong quan thang voi chieu mua la +0.166 &mdash; thang nao mua lo thi ban cung lo.</p>
+</div>
+
+<h2>Ba thay doi so voi v2.5</h2>
+<div class="panel cfg">
+  <div>1. Nguon tin hieu</div><div>v2.5 bat EMA/WMA cat xuong o <b>khung giua</b>, khung lon chi lam bo loc. v2.6 bat cat xuong <b>ngay tren khung lon</b> &mdash; setup B theo H4, setup C theo D1 &mdash; roi vao o nen khung giua dau tien sau do. Khung giua chi con nhiem vu dat SL.</div>
+  <div>2. Che do giam</div><div>Bat buoc <b>ca hai</b>: D1 dong cua <b>duoi SMA50</b> cua D1, va W1 <b>EMA9(RSI) &lt; WMA45(RSI)</b>. Day la thu lam chieu ban tu AM thanh DUONG.</div>
+  <div>3. Tach khoi chieu mua</div><div>v2.5 dung <b>chung magic</b> voi chieu mua &mdash; lenh ban chiem cho trong han muc 3 lenh va <b>chan lenh mua</b>. Loi nghiem trong, da sua: v2.6 co magic rieng, han muc rieng, % rui ro rieng.</div>
+</div>
+
+<h2>So lieu chieu ban (da tru spread 28 USD)</h2>
+<div class="panel scroll">
+<table>
+<tr><th>Cach</th><th class="num">R/lenh</th><th>Ghi chu</th></tr>
+<tr><td>Ban ngau nhien (placebo)</td><td class="num neg">-0.324</td><td>Diem xuat phat</td></tr>
+<tr><td>Ban ngay khi RSI cat xuong</td><td class="num neg">am</td><td>Ban dau tien</td></tr>
+<tr><td>Tin hieu khung lon</td><td class="num neg">-0.072</td><td>Y anh Thinh</td></tr>
+<tr><td>+ loc che do giam, toan ky</td><td class="num pos">+0.091</td><td>0.4 SE</td></tr>
+<tr><td>+ loc che do giam, walk-forward MU</td><td class="num pos">+0.181</td><td>0.7 SE, duong 4/6 fold</td></tr>
+</table>
+</div>
+<p class="note">Cai thien tong cong khoang <b>+0.4R</b> so voi diem xuat phat. Nhung &quot;cai thien&quot; va &quot;chung minh duoc&quot; la hai chuyen khac nhau &mdash; con so 0.7 SE noi ro dieu do.</p>
+
+<h2>Ghep vao chieu mua (mua 1% / ban 0.5%, 2018-2026)</h2>
+<div class="panel scroll">
+<table>
+<tr><th></th><th class="num">Von nhan</th><th class="num">CAGR</th><th class="num">Sut von sau nhat</th></tr>
+<tr><td>Chi MUA</td><td class="num">x8.30</td><td class="num">+28.2%</td><td class="num">-40.01%</td></tr>
+<tr><td>MUA + BAN</td><td class="num pos">x8.80</td><td class="num pos">+29.1%</td><td class="num">-40.01%</td></tr>
+</table>
+</div>
+
+<h2>Tran so lenh ban mo cung luc</h2>
+<div class="panel scroll">
+<table>
+<tr><th class="num">Tran</th><th class="num">So lenh</th><th class="num">R/lenh</th><th class="num">SE</th></tr>
+<tr><td class="num">1</td><td class="num">45</td><td class="num pos">+0.088</td><td class="num">0.227</td></tr>
+<tr><td class="num">2</td><td class="num">67</td><td class="num pos">+0.173</td><td class="num">0.206</td></tr>
+<tr><td class="num">3</td><td class="num">90</td><td class="num pos">+0.110</td><td class="num">0.174</td></tr>
+<tr><td class="num">4</td><td class="num">115</td><td class="num pos">+0.265</td><td class="num">0.261</td></tr>
+<tr><td class="num">8 (khong tran)</td><td class="num">155</td><td class="num pos">+0.091</td><td class="num">0.205</td></tr>
+</table>
+</div>
+<p class="note">Chenh lech giua cac tran <b>nam gon trong nhieu</b> (SE khoang 0.2) &mdash; khong duoc chon so dep nhat. Mac dinh de <span class="mono">2</span> vi ly do <b>von</b>: 2 lenh x 2 setup x 0.5% = toi da 2% rui ro ban dang mo.</p>
+
+<h2>Cach chay</h2>
+<div class="panel" style="padding:14px 18px">
+<ol class="steps">
+  <li>Copy code ben duoi, luu thanh <span class="mono">ThinhTrading_EA_v2_6.mq5</span>, bien dich</li>
+  <li>Tab <b>Dau vao</b> &mdash; kiem tra dung nhung so nay (MT5 nho tham so cu, phai nhin tan mat):</li>
+  <li><span class="mono">InpRiskPercent = 1.0</span> &nbsp;&middot;&nbsp; <span class="mono">InpBanRiskPercent = 0.5</span></li>
+  <li><span class="mono">InpDungChieuBan = true</span> &nbsp;&middot;&nbsp; <span class="mono">InpBanMaxPositions = 2</span></li>
+  <li><span class="mono">InpMinBarsInZone = 2</span> (lan truoc bi ket o 3 lam MH3a vao tre 1 nen)</li>
+  <li>Chay Strategy Tester, doi chieu file CSV voi ban Python</li>
+  <li>Sau do <b>demo 4-8 tuan, khong dung toi</b></li>
+</ol>
+</div>
+
+<h2>Code EA v2.6</h2>
+<div class="codehead">
+  <span>ThinhTrading_EA_v2_6.mq5 &middot; 1114 dong</span>
+  <button class="copy" id="btnCopy" type="button">Copy toan bo code</button>
+</div>
+<pre id="code"><code>//+------------------------------------------------------------------+
+//|  ThinhTrading_EA_v2_6.mq5                                        |
+//|  Bot giao dich - cau hinh da toi uu bang backtest Python         |
+//|  (2018-2026, kiem dinh tach doi 2018-2021 / 2022-2026)           |
+//|                                                                  |
+//|  MOI O v2.6: VIET LAI TOAN BO KHOI BAN. Chieu mua KHONG DOI 1 DONG.
+//|   Ba thay doi cot loi so voi v2.5:
+//|
+//|   1. TIN HIEU BAN DEN TU KHUNG LON, khong phai khung giua nua.
+//|      Setup B: H4 cat xuong -&gt; vao o nen H1 dau tien sau do.
+//|      Setup C: D1 cat xuong -&gt; vao o nen H4 dau tien sau do.
+//|      (v2.5 bat cat xuong o khung giua, khung lon chi lam bo loc.)
+//|
+//|   2. BAT BUOC CHE DO GIAM DA XAC NHAN - ca hai dieu kien:
+//|        a) D1 dong cua DUOI SMA50 cua chinh D1
+//|        b) W1: EMA9(RSI) &lt; WMA45(RSI)
+//|      Day la thu lam chieu ban tu AM thanh DUONG.
+//|
+//|   3. MAGIC RIENG + RUI RO RIENG cho chieu ban.
+//|      v2.5 dung chung magic voi chieu mua -&gt; lenh ban chiem cho
+//|      trong han muc 3 lenh va CHAN lenh mua. Loi nghiem trong.
+//|      v2.6 tach han: chieu ban co magic rieng, han muc rieng,
+//|      % rui ro rieng (mac dinh 0.5%, bang nua chieu mua).
+//|
+//|   SO LIEU (tru spread 28 USD):
+//|     Ban ngau nhien (placebo)              -0.324 R/lenh
+//|     Tin hieu khung lon, chua loc che do   -0.072 R/lenh
+//|     + loc che do giam, toan ky            +0.091 R/lenh (0.4 SE)
+//|     + loc che do giam, walk-forward MU    +0.181 R/lenh (0.7 SE)
+//|   Ghep vao chieu mua (mua 1% / ban 0.5%, 2018-2026):
+//|     Chi mua   : von x8.30  CAGR +28.2%  sut sau nhat -40.01%
+//|     Mua + ban : von x8.80  CAGR +29.1%  sut sau nhat -40.01%
+//|
+//|   NOI THAT: chieu ban CHUA duoc chung minh (0.7 SE; muon du 2 SE
+//|   can ~990 lenh, tuc khoang 50 nam du lieu). No KHONG phai cai phao:
+//|   tuong quan thang voi chieu mua la +0.166 - thang nao mua lo thi
+//|   ban cung lo. Ly do bat no la no KHONG lam hong chieu mua (sut von
+//|   gan nhu khong doi) va chay that la cach duy nhat con lai de lay
+//|   them bang chung. -&gt; CHAY DEMO TRUOC. Giu rui ro ban 0.5%.
+//|
+//|  MOI O v2.4: CAT BO phan dau hong cua mang chi bao.
+//|   Log v2.3 chi ra: setup C doc duoc 515 nen D1 (khong phai 800),
+//|   va bo loc khung lon D1 KHONG BAO GIO tu choi - trong khi setup B
+//|   tu choi 40 lan. Ly do: nhung o dau mang chua duoc tinh mang gia
+//|   tri rac (EMPTY_VALUE = so cuc lon). EMA seed tu 9 o dau do nen
+//|   keo theo ca duong EMA thanh so khong lo -&gt; luon &gt; WMA -&gt; luon
+//|   dong thuan. v2.4 do lai: chi tinh tu o hop le cuoi cung tro di
+//|   (RSI phai nam trong 0..100).
+//|
+//|  MOI O v2.3: doc chi bao KHUNG LON chac chan hon.
+//|   Trieu chung o v2.2: setup C (khung lon D1) khong bao gio ra
+//|   MH2, chi ra MH3a - dung y nhu khi ham doc khung lon that bai
+//|   (MH2 can khung lon dong thuan, MH3a thi khong). Setup B (khung
+//|   lon H4) khop 21/21 lenh voi Python nen loi nam o cach doc D1.
+//|   v2.3: xin dung so nen dang co, kiem tra chi bao da tinh xong
+//|   chua, va GHI LOG khi doc that bai de biet chinh xac ly do.
+//|
+//|  MOI O v2.2: chi vao lenh khi SL nam trong 0.5% - 1.5% gia BTC.
+//|   Do tu 2018-2026: SL &lt;0.5% gia -&gt; -0.56R/lenh (bi quet).
+//|   SL 0.5-1.5% gia -&gt; +0.60R/lenh (3.4 SE), duong 8/9 nam.
+//|   SL &gt;1.5% gia -&gt; +0.09R, gan nhu het loi the.
+//|   Loc nay vua tang loi the vua lam SL tinh bang USD nho lai,
+//|   nen tai khoan nho moi chiu duoc.
+//|
+//|  SUA SO VOI v2.0:                                                |
+//|   Ban v2.0 dung may trang thai quan tinh kieu CONG DON qua tung  |
+//|   nen. Neu chi mot nen bi bo lo (tester tra du lieu cham, tick   |
+//|   dau nen den muon...) thi bo dem lech vinh vien -&gt; MH3a vao     |
+//|   tre dung 1 nen so voi Python.                                  |
+//|   v2.1 DUNG LAI TOAN BO trang thai tu lich su moi nen (swing +   |
+//|   quan tinh), nen khong the lech nua. Da kiem chung tren Python: |
+//|   dung lai tu 300 nen gan nhat cho ket qua GIONG HET chay tu     |
+//|   dau lich su.                                                   |
+//|                                                                  |
+//|  CAU HINH:                                                       |
+//|   - Setup B: khung giua H1, khung lon H4                         |
+//|   - Setup C: khung giua H4, khung lon D1                         |
+//|   - MH2 (EMA9(RSI) cat LEN WMA45(RSI) + khung lon dong thuan)    |
+//|     va MH3a (quan tinh tang VUA BAT)                             |
+//|   - CHI LENH MUA                                                 |
+//|   - SL dat DUNG tai day swing gan nhat khung giua, KHONG DEM     |
+//|   - Thoat 100% bang trailing doi theo day swing moi              |
+//|   - Toi da 3 lenh mo cung luc moi setup                          |
+//|                                                                  |
+//|  KHONG dung #include.                                            |
+//+------------------------------------------------------------------+
+#property copyright &quot;ThinhTrading&quot;
+#property version   &quot;2.60&quot;
+#property strict
+
+//====================== THAM SO ====================================
+input group &quot;--- Quan ly von ---&quot;
+input double InpRiskPercent   = 2.0;     // Rui ro moi lenh (% so du)
+input int    InpMaxPositions  = 3;       // Toi da lenh mo cung luc (moi setup)
+input double InpSLMinPct      = 0.5;     // SL toi thieu (% gia BTC) - duoi nguong nay bo qua
+input double InpSLMaxPct      = 1.5;     // SL toi da  (% gia BTC) - tren nguong nay bo qua
+input double InpTranRuiRoPct  = 3.0;     // Neu 0.01 lot rui ro hon % nay so du -&gt; bo qua lenh
+
+input group &quot;--- Chieu BAN (tin hieu tu KHUNG LON + che do giam) ---&quot;
+input bool   InpDungChieuBan   = true;    // Bat chieu ban
+input double InpBanRiskPercent = 0.5;     // Rui ro moi lenh BAN (% so du) - giu 0.5
+input int    InpBanMaxPositions= 2;       // Toi da lenh BAN mo cung luc (moi setup)
+input double InpBanSLMinPct    = 0.5;     // SL toi thieu cho lenh ban (% gia)
+input double InpBanSLMaxPct    = 1.5;     // SL toi da  cho lenh ban (% gia)
+input double InpBanBatTrailR   = 1.5;     // Lai du bao nhieu R thi bat trailing
+input bool   InpBanCanW1Xuong  = true;    // Bat buoc W1: EMA9(RSI) &lt; WMA45(RSI)
+input bool   InpBanCanD1DuoiMA = true;    // Bat buoc D1 dong cua duoi SMA50 cua D1
+input int    InpBanD1MAPeriod  = 50;      // Chu ky SMA tren D1
+
+input group &quot;--- Setup ---&quot;
+input bool   InpDungSetupB    = true;    // Setup B (H1 / H4)
+input bool   InpDungSetupC    = true;    // Setup C (H4 / D1)
+
+input group &quot;--- Chi bao ---&quot;
+input int    InpRSIPeriod     = 14;
+input int    InpEMAPeriod     = 9;       // EMA tren RSI
+input int    InpWMAPeriod     = 45;      // WMA tren RSI
+input int    InpWing          = 2;       // so nen 2 ben de xac nhan swing
+input int    InpMinBarsInZone = 2;       // so nen lien tiep trong vung 70/30
+
+input group &quot;--- Khac ---&quot;
+input long   InpMagicB        = 20260901;
+input long   InpMagicC        = 20260902;
+input long   InpMagicBanB     = 20260911;   // magic RIENG cho lenh ban setup B
+input long   InpMagicBanC     = 20260912;   // magic RIENG cho lenh ban setup C
+input int    InpSlippage      = 50;
+input bool   InpGhiLog        = true;    // ghi CSV de doi chieu voi Python
+input string InpLogSuffix     = &quot;v25&quot;;
+
+#define LOOKBACK   800
+#define MAX_SWING  20     // giong het ban Python da kiem chung
+#define MAX_POS    64
+
+//====================== CAU TRUC ===================================
+struct SwingPt
+  {
+   datetime time;
+   double   price;
+   double   rsi;
+  };
+
+struct PosState
+  {
+   ulong    ticket;
+   datetime tVao;
+   double   entry;
+   double   slGoc;
+   int      st;          // 0 cho Dinh1, 1 cho Day1, 2 cho pha Dinh1, 3 dang trail
+   double   dinh1;
+   datetime tDinh1;
+   double   day1;
+   double   trail;
+   string   mohinh;
+   int      huong;       // +1 mua, -1 ban
+  };
+
+struct SetupState
+  {
+   bool            dung;
+   string          ten;
+   ENUM_TIMEFRAMES tfMid;
+   ENUM_TIMEFRAMES tfLarge;
+   long            magic;
+   long            magicBan;
+   int             hRsiMid;
+   int             hRsiLarge;
+   datetime        lastBar;
+   datetime        tLonBan;      // nen khung lon cuoi cung da xet cho chieu ban
+   SwingPt         sH[MAX_SWING];
+   int             nH;
+   SwingPt         sL[MAX_SWING];
+   int             nL;
+   PosState        pos[MAX_POS];
+   int             nPos;
+   bool            daBaoThieuDL;
+   bool            daBaoKhungLon;
+   bool            daBaoKhungLonOK;
+  };
+
+//--- khai bao truoc
+void  DonDepLenh(const int k, const bool ghiLog);
+void  CapNhatTrailTheoNen(const int k, const double nenHigh, const double nenClose);
+void  CapNhatTrailBan(const int k, const double nenHigh, const double nenLow, const double nenClose);
+bool  KhungTuanXuong(void);
+bool  D1DuoiTrungBinh(void);
+bool  CheDoGiam(void);
+bool  KhungLonCatXuong(const int k);
+void  XuLyChieuBan(const int k, const datetime tNen);
+void  VaoLenhBan(const int k, const datetime tNen);
+void  DatSLBan(const ulong ticket, const double slMoi);
+double TinhLotVoiRuiRo(const double slDistance, const double riskPct);
+void  DatSL(const ulong ticket, const double slMoi);
+void  XuLySetup(const int k);
+bool  DocKhungLon(const int k, double &amp;eLon, double &amp;wLon);
+int   CatDauHong(const double &amp;src[], const int n);
+void  XayDungTrangThai(const int k, const MqlRates &amp;rt[], const double &amp;rsi[],
+                       const int n, int &amp;momNow, int &amp;momTruoc);
+ENUM_ORDER_TYPE_FILLING LayKieuKhop(void);
+
+SetupState g_su[2];
+int    g_log = INVALID_HANDLE;
+double g_tickSize = 0, g_tickValue = 0, g_lotMin = 0, g_lotMax = 0, g_lotStep = 0;
+int    g_stopLevel = 0;
+int    g_hRsiW1   = INVALID_HANDLE;
+
+//====================== TRUNG BINH DONG TU VIET ====================
+// src[] xep theo thu tu TANG dan thoi gian. out[] cung kich thuoc.
+void ComputeEMA(const double &amp;src[], const int n, const int period, double &amp;out[])
+  {
+   ArrayResize(out, n);
+   ArrayInitialize(out, EMPTY_VALUE);
+   if(n &lt; period || period &lt; 1) return;
+   double sum = 0;
+   for(int i = 0; i &lt; period; i++) sum += src[i];
+   out[period-1] = sum / period;
+   double k = 2.0 / (period + 1.0);
+   for(int i = period; i &lt; n; i++)
+      out[i] = src[i] * k + out[i-1] * (1.0 - k);
+  }
+
+void ComputeWMA(const double &amp;src[], const int n, const int period, double &amp;out[])
+  {
+   ArrayResize(out, n);
+   ArrayInitialize(out, EMPTY_VALUE);
+   if(n &lt; period || period &lt; 1) return;
+   double denom = period * (period + 1) / 2.0;
+   for(int i = period-1; i &lt; n; i++)
+     {
+      double s = 0;
+      for(int j = 0; j &lt; period; j++)
+         s += src[i-j] * (period - j);     // nen moi nhat trong so lon nhat
+      out[i] = s / denom;
+     }
+  }
+
+//====================== TIEN ICH ===================================
+bool LaGiaTriTot(const double v) { return(v != EMPTY_VALUE &amp;&amp; v == v); }
+
+// Tra ve vi tri bat dau cua doan DUOI CUNG toan gia tri hop le.
+// RSI luon nam trong 0..100; bat cu o nao ngoai khoang do la chua
+// duoc tinh (MT5 dien EMPTY_VALUE) -&gt; phai bo, neu khong EMA seed
+// se hong va keo lech ca duong.
+int CatDauHong(const double &amp;src[], const int n)
+  {
+   int bd = 0;
+   for(int i = 0; i &lt; n; i++)
+      if(!LaGiaTriTot(src[i]) || src[i] &lt; 0.0 || src[i] &gt; 100.0) bd = i + 1;
+   return(bd);
+  }
+
+void ThemSwing(SwingPt &amp;arr[], int &amp;n, const datetime t, const double p, const double r)
+  {
+   if(n &gt;= MAX_SWING)
+     {
+      for(int i = 1; i &lt; MAX_SWING; i++) arr[i-1] = arr[i];
+      n = MAX_SWING - 1;
+     }
+   arr[n].time = t; arr[n].price = p; arr[n].rsi = r;
+   n++;
+  }
+
+int DemLenhMo(const long magic)
+  {
+   int c = 0;
+   for(int i = PositionsTotal()-1; i &gt;= 0; i--)
+     {
+      ulong tk = PositionGetTicket(i);
+      if(tk == 0) continue;
+      if(PositionGetString(POSITION_SYMBOL) != _Symbol) continue;
+      if(PositionGetInteger(POSITION_MAGIC) != magic) continue;
+      c++;
+     }
+   return(c);
+  }
+
+bool LenhConSong(const ulong ticket)
+  {
+   for(int i = PositionsTotal()-1; i &gt;= 0; i--)
+      if(PositionGetTicket(i) == ticket) return(true);
+   return(false);
+  }
+
+double TinhLotVoiRuiRo(const double slDistance, const double riskPct)
+  {
+   if(slDistance &lt;= 0 || g_tickSize &lt;= 0 || g_tickValue &lt;= 0) return(0);
+   if(riskPct &lt;= 0) return(0);
+   double tien = AccountInfoDouble(ACCOUNT_BALANCE) * riskPct / 100.0;
+   double loMotLot = (slDistance / g_tickSize) * g_tickValue;
+   if(loMotLot &lt;= 0) return(0);
+   double lot = tien / loMotLot;
+   lot = MathFloor(lot / g_lotStep) * g_lotStep;
+   if(lot &lt; g_lotMin) return(0);
+   if(lot &gt; g_lotMax) lot = g_lotMax;
+   return(NormalizeDouble(lot, 2));
+  }
+
+// Chieu mua giu nguyen hanh vi cu: van la InpRiskPercent.
+double TinhLot(const double slDistance)
+  {
+   return(TinhLotVoiRuiRo(slDistance, InpRiskPercent));
+  }
+
+ENUM_ORDER_TYPE_FILLING LayKieuKhop(void)
+  {
+   long mode = SymbolInfoInteger(_Symbol, SYMBOL_FILLING_MODE);
+   if((mode &amp; SYMBOL_FILLING_FOK) != 0) return(ORDER_FILLING_FOK);
+   if((mode &amp; SYMBOL_FILLING_IOC) != 0) return(ORDER_FILLING_IOC);
+   return(ORDER_FILLING_RETURN);
+  }
+
+//====================== GHI LOG ====================================
+void MoLog(void)
+  {
+   if(!InpGhiLog) return;
+   string ten = &quot;ThinhTrading_EA_&quot; + InpLogSuffix + &quot;_&quot; + _Symbol + &quot;.csv&quot;;
+   g_log = FileOpen(ten, FILE_WRITE|FILE_CSV|FILE_ANSI|FILE_COMMON, &#x27;,&#x27;);
+   if(g_log == INVALID_HANDLE) { Print(&quot;Khong mo duoc file log: &quot;, GetLastError()); return; }
+   FileWrite(g_log, &quot;thoi_gian&quot;, &quot;nen_tin_hieu&quot;, &quot;setup&quot;, &quot;mo_hinh&quot;, &quot;huong&quot;,
+             &quot;gia_vao&quot;, &quot;sl&quot;, &quot;r_usd&quot;, &quot;lot&quot;, &quot;ket_qua&quot;);
+   FileFlush(g_log);
+  }
+
+void GhiLog(const string setup, const datetime tNen, const string mh, const string huong,
+            const double entry, const double sl, const double r,
+            const double lot, const string kq)
+  {
+   if(g_log == INVALID_HANDLE) return;
+   FileWrite(g_log, TimeToString(TimeCurrent(), TIME_DATE|TIME_MINUTES),
+             TimeToString(tNen, TIME_DATE|TIME_MINUTES),
+             setup, mh, huong,
+             DoubleToString(entry, _Digits), DoubleToString(sl, _Digits),
+             DoubleToString(r, 2), DoubleToString(lot, 2), kq);
+   FileFlush(g_log);
+  }
+
+//====================== KHOI TAO ===================================
+int OnInit()
+  {
+   g_tickSize  = SymbolInfoDouble(_Symbol, SYMBOL_TRADE_TICK_SIZE);
+   g_tickValue = SymbolInfoDouble(_Symbol, SYMBOL_TRADE_TICK_VALUE);
+   g_lotMin    = SymbolInfoDouble(_Symbol, SYMBOL_VOLUME_MIN);
+   g_lotMax    = SymbolInfoDouble(_Symbol, SYMBOL_VOLUME_MAX);
+   g_lotStep   = SymbolInfoDouble(_Symbol, SYMBOL_VOLUME_STEP);
+   g_stopLevel = (int)SymbolInfoInteger(_Symbol, SYMBOL_TRADE_STOPS_LEVEL);
+
+   if(g_tickSize &lt;= 0 || g_tickValue &lt;= 0 || g_lotStep &lt;= 0)
+     { Print(&quot;Khong doc duoc thong so symbol&quot;); return(INIT_FAILED); }
+
+   g_su[0].dung = InpDungSetupB; g_su[0].ten = &quot;B&quot;;
+   g_su[0].tfMid = PERIOD_H1;    g_su[0].tfLarge = PERIOD_H4;
+   g_su[0].magic = InpMagicB;    g_su[0].magicBan = InpMagicBanB;
+
+   g_su[1].dung = InpDungSetupC; g_su[1].ten = &quot;C&quot;;
+   g_su[1].tfMid = PERIOD_H4;    g_su[1].tfLarge = PERIOD_D1;
+   g_su[1].magic = InpMagicC;    g_su[1].magicBan = InpMagicBanC;
+
+   for(int i = 0; i &lt; 2; i++)
+     {
+      g_su[i].hRsiMid = INVALID_HANDLE; g_su[i].hRsiLarge = INVALID_HANDLE;
+      g_su[i].nH = 0; g_su[i].nL = 0;
+      g_su[i].lastBar = 0; g_su[i].tLonBan = 0;
+      g_su[i].nPos = 0; g_su[i].daBaoThieuDL = false;
+      g_su[i].daBaoKhungLon = false; g_su[i].daBaoKhungLonOK = false;
+      if(!g_su[i].dung) continue;
+      g_su[i].hRsiMid   = iRSI(_Symbol, g_su[i].tfMid,   InpRSIPeriod, PRICE_CLOSE);
+      g_su[i].hRsiLarge = iRSI(_Symbol, g_su[i].tfLarge, InpRSIPeriod, PRICE_CLOSE);
+      if(g_su[i].hRsiMid == INVALID_HANDLE || g_su[i].hRsiLarge == INVALID_HANDLE)
+        { Print(&quot;Khong tao duoc handle RSI cho setup &quot;, g_su[i].ten); return(INIT_FAILED); }
+     }
+
+   if(InpDungChieuBan)
+     {
+      g_hRsiW1 = iRSI(_Symbol, PERIOD_W1, InpRSIPeriod, PRICE_CLOSE);
+      if(g_hRsiW1 == INVALID_HANDLE) { Print(&quot;Khong tao duoc RSI khung tuan&quot;); return(INIT_FAILED); }
+     }
+
+   MoLog();
+   Print(&quot;ThinhTrading EA v2.6 khoi dong. MUA: rui ro &quot;, InpRiskPercent,
+         &quot;%/lenh, toi da &quot;, InpMaxPositions, &quot; lenh moi setup.&quot;);
+   if(InpDungChieuBan)
+      Print(&quot;  BAN: BAT - rui ro &quot;, InpBanRiskPercent, &quot;%/lenh, toi da &quot;,
+            InpBanMaxPositions, &quot; lenh moi setup, chi vao khi che do giam.&quot;);
+   else
+      Print(&quot;  BAN: TAT.&quot;);
+   return(INIT_SUCCEEDED);
+  }
+
+void OnDeinit(const int reason)
+  {
+   if(g_log != INVALID_HANDLE) { FileClose(g_log); g_log = INVALID_HANDLE; }
+   if(g_hRsiW1 != INVALID_HANDLE) IndicatorRelease(g_hRsiW1);
+   for(int i = 0; i &lt; 2; i++)
+     {
+      if(g_su[i].hRsiMid   != INVALID_HANDLE) IndicatorRelease(g_su[i].hRsiMid);
+      if(g_su[i].hRsiLarge != INVALID_HANDLE) IndicatorRelease(g_su[i].hRsiLarge);
+     }
+  }
+
+//====================== DOC CHI BAO KHUNG LON ======================
+bool DocKhungLon(const int k, double &amp;eLon, double &amp;wLon)
+  {
+   //--- so nen khung lon dang thuc su co
+   int coNen = Bars(_Symbol, g_su[k].tfLarge);
+   int daTinh = BarsCalculated(g_su[k].hRsiLarge);
+   int muon = LOOKBACK;
+   if(coNen &gt; 1 &amp;&amp; coNen - 1 &lt; muon) muon = coNen - 1;
+   if(daTinh &gt; 1 &amp;&amp; daTinh - 1 &lt; muon) muon = daTinh - 1;
+   if(muon &lt; InpWMAPeriod + 5)
+     {
+      if(!g_su[k].daBaoKhungLon)
+        {
+         g_su[k].daBaoKhungLon = true;
+         GhiLog(g_su[k].ten, 0, &quot;-&quot;, &quot;-&quot;, 0, 0, 0, 0,
+                &quot;KHUNG LON chua du: Bars=&quot; + IntegerToString(coNen) +
+                &quot; BarsCalculated=&quot; + IntegerToString(daTinh));
+        }
+      return(false);
+     }
+
+   double rsi[];
+   ArraySetAsSeries(rsi, false);
+   int got = CopyBuffer(g_su[k].hRsiLarge, 0, 1, muon, rsi);
+   if(got &lt; InpWMAPeriod + 5)
+     {
+      if(!g_su[k].daBaoKhungLon)
+        {
+         g_su[k].daBaoKhungLon = true;
+         GhiLog(g_su[k].ten, 0, &quot;-&quot;, &quot;-&quot;, 0, 0, 0, 0,
+                &quot;KHUNG LON CopyBuffer=&quot; + IntegerToString(got) +
+                &quot; (xin &quot; + IntegerToString(muon) + &quot;, Bars=&quot; + IntegerToString(coNen) + &quot;)&quot;);
+        }
+      return(false);
+     }
+
+   int bd = CatDauHong(rsi, got);
+   int m  = got - bd;
+   if(m &lt; InpWMAPeriod + 5)
+     {
+      if(!g_su[k].daBaoKhungLon)
+        {
+         g_su[k].daBaoKhungLon = true;
+         GhiLog(g_su[k].ten, 0, &quot;-&quot;, &quot;-&quot;, 0, 0, 0, 0,
+                &quot;KHUNG LON sau khi cat dau hong chi con &quot; + IntegerToString(m) + &quot; nen&quot;);
+        }
+      return(false);
+     }
+   double sach[];
+   ArrayResize(sach, m);
+   for(int i = 0; i &lt; m; i++) sach[i] = rsi[bd + i];
+   got = m;
+
+   double e[], w[];
+   ComputeEMA(sach, got, InpEMAPeriod, e);
+   ComputeWMA(sach, got, InpWMAPeriod, w);
+   if(!LaGiaTriTot(e[got-1]) || !LaGiaTriTot(w[got-1]))
+     {
+      if(!g_su[k].daBaoKhungLon)
+        {
+         g_su[k].daBaoKhungLon = true;
+         GhiLog(g_su[k].ten, 0, &quot;-&quot;, &quot;-&quot;, 0, 0, 0, 0,
+                &quot;KHUNG LON gia tri hong, got=&quot; + IntegerToString(got));
+        }
+      return(false);
+     }
+
+   if(!g_su[k].daBaoKhungLonOK)
+     {
+      g_su[k].daBaoKhungLonOK = true;
+      GhiLog(g_su[k].ten, 0, &quot;-&quot;, &quot;-&quot;, 0, 0, 0, 0,
+             &quot;khung lon OK: dung &quot; + IntegerToString(got) + &quot; nen (bo &quot; +
+             IntegerToString(bd) + &quot; nen dau hong)&quot;);
+     }
+   eLon = e[got-1]; wLon = w[got-1];
+   return(true);
+  }
+
+//====================== DUNG LAI TRANG THAI TU LICH SU =============
+// Day la cho sua chinh cua v2.1.
+// Moi lan co nen khung giua dong cua, ta KHONG cong don tiep vao
+// trang thai cu, ma dung lai toan bo tu dau cua so du lieu:
+//   - danh sach swing (fractal InpWing nen hai ben)
+//   - may trang thai quan tinh (vung 70/30 + co suy yeu)
+// Nho vay bo lo mot nen cung khong lam lech trang thai vinh vien.
+// Da kiem chung tren Python: dung lai tu 300 nen gan nhat cho ket
+// qua giong het chay tu dau lich su (11/11 lan bat quan tinh).
+void XayDungTrangThai(const int k, const MqlRates &amp;rt[], const double &amp;rsi[],
+                      const int n, int &amp;momNow, int &amp;momTruoc)
+  {
+   int wing = InpWing;
+   g_su[k].nH = 0; g_su[k].nL = 0;
+   int  mom = 0, z70 = 0, z30 = 0;
+   bool suy = false;
+   momNow = 0; momTruoc = 0;
+
+   for(int i = 2*wing; i &lt; n; i++)
+     {
+      if(!LaGiaTriTot(rsi[i])) continue;
+
+      //--- swing xac nhan tai nen i-wing
+      bool coDinhMoi = false, coDayMoi = false;
+      int c = i - wing;
+      bool laDinh = true, laDay = true;
+      int demH = 0, demL = 0;
+      for(int q = c - wing; q &lt;= c + wing; q++)
+        {
+         if(rt[q].high &gt; rt[c].high) laDinh = false;
+         if(rt[q].low  &lt; rt[c].low ) laDay  = false;
+         if(rt[q].high == rt[c].high) demH++;
+         if(rt[q].low  == rt[c].low ) demL++;
+        }
+      if(laDinh &amp;&amp; demH == 1)
+         if(g_su[k].nH == 0 || g_su[k].sH[g_su[k].nH-1].time != rt[c].time)
+           { ThemSwing(g_su[k].sH, g_su[k].nH, rt[c].time, rt[c].high, rsi[c]); coDinhMoi = true; }
+      if(laDay &amp;&amp; demL == 1)
+         if(g_su[k].nL == 0 || g_su[k].sL[g_su[k].nL-1].time != rt[c].time)
+           { ThemSwing(g_su[k].sL, g_su[k].nL, rt[c].time, rt[c].low, rsi[c]); coDayMoi = true; }
+
+      //--- may trang thai quan tinh
+      momTruoc = mom;
+      z70 = (rsi[i] &gt;= 70.0) ? z70 + 1 : 0;
+      z30 = (rsi[i] &lt;= 30.0) ? z30 + 1 : 0;
+
+      if(z70 &gt;= InpMinBarsInZone)
+        {
+         if(mom != 1) { mom = 1; suy = false; }
+        }
+      else if(z30 &gt;= InpMinBarsInZone)
+        {
+         if(mom != -1) { mom = -1; suy = false; }
+        }
+      else
+        {
+         if(mom == 1 &amp;&amp; coDinhMoi &amp;&amp; g_su[k].nH &gt;= 2)
+           {
+            double gm = g_su[k].sH[g_su[k].nH-1].price, gc = g_su[k].sH[g_su[k].nH-2].price;
+            double rm = g_su[k].sH[g_su[k].nH-1].rsi,   rc = g_su[k].sH[g_su[k].nH-2].rsi;
+            if(gm &gt; gc)
+              {
+               if(rm &lt; 70.0)    { mom = 2;  suy = false; }
+               else if(rm &lt; rc) { suy = true; }
+              }
+           }
+         if(mom == -1 &amp;&amp; coDayMoi &amp;&amp; g_su[k].nL &gt;= 2)
+           {
+            double gm = g_su[k].sL[g_su[k].nL-1].price, gc = g_su[k].sL[g_su[k].nL-2].price;
+            double rm = g_su[k].sL[g_su[k].nL-1].rsi,   rc = g_su[k].sL[g_su[k].nL-2].rsi;
+            if(gm &lt; gc)
+              {
+               if(rm &gt; 30.0)    { mom = -2; suy = false; }
+               else if(rm &gt; rc) { suy = true; }
+              }
+           }
+        }
+     }
+   momNow = mom;
+  }
+
+//====================== CHE DO THI TRUONG (chi dung cho chieu ban) =
+// Hai dieu kien, deu tinh bang nen DA DONG (shift 1 tro di).
+// Day la bo loc lam chieu ban tu AM (-0.072R) thanh DUONG (+0.091R).
+// Quan trong: phan lon loi the den tu CHE DO, khong phai tu tin hieu
+// RSI - nen KHONG duoc bo bo loc nay de &quot;cho no vao nhieu lenh hon&quot;.
+bool KhungTuanXuong(void)
+  {
+   if(g_hRsiW1 == INVALID_HANDLE) return(false);
+   int coNen = Bars(_Symbol, PERIOD_W1);
+   int daTinh = BarsCalculated(g_hRsiW1);
+   int muon = LOOKBACK;
+   if(coNen  &gt; 1 &amp;&amp; coNen  - 1 &lt; muon) muon = coNen  - 1;
+   if(daTinh &gt; 1 &amp;&amp; daTinh - 1 &lt; muon) muon = daTinh - 1;
+   if(muon &lt; InpWMAPeriod + 5) return(false);
+   double r[];
+   ArraySetAsSeries(r, false);
+   int got = CopyBuffer(g_hRsiW1, 0, 1, muon, r);
+   if(got &lt; InpWMAPeriod + 5) return(false);
+   int bd = CatDauHong(r, got);
+   int m = got - bd;
+   if(m &lt; InpWMAPeriod + 5) return(false);
+   double sach[];
+   ArrayResize(sach, m);
+   for(int i = 0; i &lt; m; i++) sach[i] = r[bd + i];
+   double e[], w[];
+   ComputeEMA(sach, m, InpEMAPeriod, e);
+   ComputeWMA(sach, m, InpWMAPeriod, w);
+   if(!LaGiaTriTot(e[m-1]) || !LaGiaTriTot(w[m-1])) return(false);
+   return(e[m-1] &lt; w[m-1]);
+  }
+
+// D1 dong cua duoi SMA50 cua chinh D1 (nen D1 da dong).
+bool D1DuoiTrungBinh(void)
+  {
+   int per = InpBanD1MAPeriod;
+   if(per &lt; 2) return(false);
+   MqlRates r[];
+   ArraySetAsSeries(r, false);
+   int got = CopyRates(_Symbol, PERIOD_D1, 1, per, r);
+   if(got &lt; per) return(false);
+   double s = 0;
+   for(int i = 0; i &lt; got; i++)
+     {
+      if(r[i].close &lt;= 0) return(false);
+      s += r[i].close;
+     }
+   double ma = s / got;
+   return(r[got-1].close &lt; ma);
+  }
+
+bool CheDoGiam(void)
+  {
+   if(InpBanCanD1DuoiMA &amp;&amp; !D1DuoiTrungBinh()) return(false);
+   if(InpBanCanW1Xuong  &amp;&amp; !KhungTuanXuong())  return(false);
+   return(true);
+  }
+
+//====================== TIN HIEU BAN TU KHUNG LON ==================
+// Khac han v2.5: v2.5 bat EMA/WMA cat xuong o KHUNG GIUA roi hoi
+// khung lon co dong y khong. v2.6 bat cat xuong NGAY TREN KHUNG LON,
+// khung giua chi con nhiem vu dat SL.
+// Doc hai gia tri cuoi cua duong EMA/WMA khung lon (nen da dong) va
+// tra ve true neu nen khung lon VUA DONG la nen cat xuong.
+bool KhungLonCatXuong(const int k)
+  {
+   int coNen  = Bars(_Symbol, g_su[k].tfLarge);
+   int daTinh = BarsCalculated(g_su[k].hRsiLarge);
+   int muon = LOOKBACK;
+   if(coNen  &gt; 1 &amp;&amp; coNen  - 1 &lt; muon) muon = coNen  - 1;
+   if(daTinh &gt; 1 &amp;&amp; daTinh - 1 &lt; muon) muon = daTinh - 1;
+   if(muon &lt; InpWMAPeriod + 5) return(false);
+
+   double rsi[];
+   ArraySetAsSeries(rsi, false);
+   int got = CopyBuffer(g_su[k].hRsiLarge, 0, 1, muon, rsi);
+   if(got &lt; InpWMAPeriod + 5) return(false);
+
+   int bd = CatDauHong(rsi, got);
+   int m  = got - bd;
+   if(m &lt; InpWMAPeriod + 5) return(false);
+   double sach[];
+   ArrayResize(sach, m);
+   for(int i = 0; i &lt; m; i++) sach[i] = rsi[bd + i];
+
+   double e[], w[];
+   ComputeEMA(sach, m, InpEMAPeriod, e);
+   ComputeWMA(sach, m, InpWMAPeriod, w);
+   if(!LaGiaTriTot(e[m-1]) || !LaGiaTriTot(w[m-1]) ||
+      !LaGiaTriTot(e[m-2]) || !LaGiaTriTot(w[m-2])) return(false);
+
+   return(e[m-2] &gt;= w[m-2] &amp;&amp; e[m-1] &lt; w[m-1]);
+  }
+
+//====================== DIEU PHOI CHIEU BAN ========================
+// Goi moi khi co nen KHUNG GIUA dong cua. Chi vao lenh o nen khung
+// giua DAU TIEN sau khi nen khung lon dong cua - giong het ban Python
+// (sim8.py): tim vi tri bang searchsorted tren thoi diem dong cua.
+// Co tLonBan dam bao mot nen khung lon chi sinh ra toi da MOT lenh.
+void XuLyChieuBan(const int k, const datetime tNen)
+  {
+   datetime tLon = iTime(_Symbol, g_su[k].tfLarge, 1);   // nen khung lon da dong
+   if(tLon == 0) return;
+   if(tLon == g_su[k].tLonBan) return;                   // nen nay da xet roi
+   bool lanDau = (g_su[k].tLonBan == 0);
+   g_su[k].tLonBan = tLon;
+   if(lanDau) return;        // vua nap EA: khong vao lenh theo tin hieu cu
+
+   //--- chi vao o nen khung giua DAU TIEN sau khi nen khung lon dong.
+   //    Neu EA bo lo nen do (mat ket noi, tester nhay nen) thi bo qua
+   //    luon, khong vao tre - vao tre la khop o gia khac han backtest.
+   datetime tLonDong = tLon  + PeriodSeconds(g_su[k].tfLarge);
+   datetime tMidDong = tNen  + PeriodSeconds(g_su[k].tfMid);
+   if(tMidDong &lt; tLonDong) return;
+   if(tMidDong - tLonDong &gt;= PeriodSeconds(g_su[k].tfMid))
+     {
+      GhiLog(g_su[k].ten, tNen, &quot;BAN_LON&quot;, &quot;SELL&quot;, 0, 0, 0, 0,
+             &quot;bo qua - lo nen khung lon, khong vao tre&quot;);
+      return;
+     }
+
+   if(!KhungLonCatXuong(k)) return;
+
+   if(!CheDoGiam())
+     {
+      GhiLog(g_su[k].ten, tNen, &quot;BAN_LON&quot;, &quot;SELL&quot;, 0, 0, 0, 0,
+             &quot;bo qua - chua du che do giam (D1 duoi SMA&quot; +
+             IntegerToString(InpBanD1MAPeriod) + &quot; + W1 xuong)&quot;);
+      return;
+     }
+   if(g_su[k].nH &lt; 1) return;
+   VaoLenhBan(k, tNen);
+  }
+
+//====================== XU LY 1 NEN KHUNG GIUA =====================
+void XuLySetup(const int k)
+  {
+   if(!g_su[k].dung) return;
+
+   datetime tBar = iTime(_Symbol, g_su[k].tfMid, 0);
+   if(tBar == 0 || tBar == g_su[k].lastBar) { DonDepLenh(k, false); return; }
+   g_su[k].lastBar = tBar;
+
+   //--- lay cac nen DA DONG (tu shift 1), xep TANG dan thoi gian
+   //    LUU Y: CopyRates va CopyBuffer co the tra ve SO LUONG KHAC NHAU
+   //    (nen co san nhieu hon gia tri chi bao da tinh). Ca hai deu ket
+   //    thuc o nen shift 1, nen ta cat lay PHAN CUOI bang nhau roi moi
+   //    dung. Ban v2.0 doi hai so phai bang nhau va lang le bo qua ca
+   //    nen do - day la ly do setup C gan nhu khong vao lenh nao.
+   MqlRates rtAll[];
+   double   rsiAll[];
+   ArraySetAsSeries(rtAll, false);
+   ArraySetAsSeries(rsiAll, false);
+   int nRate = CopyRates(_Symbol, g_su[k].tfMid, 1, LOOKBACK, rtAll);
+   int nRsi  = CopyBuffer(g_su[k].hRsiMid, 0, 1, LOOKBACK, rsiAll);
+   int n = MathMin(nRate, nRsi);
+   int nToiThieu = InpWMAPeriod + 4*InpWing + 20;
+   if(n &lt; nToiThieu)
+     {
+      if(!g_su[k].daBaoThieuDL)
+        {
+         g_su[k].daBaoThieuDL = true;
+         GhiLog(g_su[k].ten, tBar, &quot;-&quot;, &quot;-&quot;, 0, 0, 0, 0,
+                &quot;chua du du lieu: nen=&quot; + IntegerToString(nRate) +
+                &quot; rsi=&quot; + IntegerToString(nRsi));
+        }
+      return;
+     }
+
+   //--- cat bo phan dau hong (o chi bao chua duoc tinh)
+   double tam[];
+   ArrayResize(tam, n);
+   for(int i = 0; i &lt; n; i++) tam[i] = rsiAll[nRsi - n + i];
+   int bdMid = CatDauHong(tam, n);
+   n -= bdMid;
+   if(n &lt; nToiThieu) return;
+
+   MqlRates rt[];
+   double   rsi[];
+   ArrayResize(rt, n);
+   ArrayResize(rsi, n);
+   for(int i = 0; i &lt; n; i++)
+     {
+      rt[i]  = rtAll[nRate - n + i];
+      rsi[i] = rsiAll[nRsi  - n + i];
+     }
+
+   double ema[], wma[];
+   ComputeEMA(rsi, n, InpEMAPeriod, ema);
+   ComputeWMA(rsi, n, InpWMAPeriod, wma);
+   int j = n - 1;                       // nen vua dong cua
+   if(!LaGiaTriTot(ema[j])   || !LaGiaTriTot(wma[j]) ||
+      !LaGiaTriTot(ema[j-1]) || !LaGiaTriTot(wma[j-1])) return;
+
+   //--- dung lai swing + quan tinh tu dau cua so (khong cong don)
+   int momNow = 0, momTruoc = 0;
+   XayDungTrangThai(k, rt, rsi, n, momNow, momTruoc);
+
+   //--- cap nhat trailing cho cac lenh dang mo
+   CapNhatTrailTheoNen(k, rt[j].high, rt[j].close);
+   if(InpDungChieuBan) CapNhatTrailBan(k, rt[j].high, rt[j].low, rt[j].close);
+
+   //--- tin hieu
+   int cross = 0;
+   if(ema[j-1] &lt;= wma[j-1] &amp;&amp; ema[j] &gt; wma[j]) cross = +1;
+   if(ema[j-1] &gt;= wma[j-1] &amp;&amp; ema[j] &lt; wma[j]) cross = -1;
+
+   double eLon = 0, wLon = 0;
+   bool coLon = DocKhungLon(k, eLon, wLon);
+
+   string mohinh = &quot;&quot;;
+   if(cross == +1 &amp;&amp; coLon &amp;&amp; eLon &gt; wLon) mohinh = &quot;MH2&quot;;
+   else if(cross == +1)
+      GhiLog(g_su[k].ten, rt[j].time, &quot;MH2&quot;, &quot;BUY&quot;, 0, 0, 0, 0,
+             coLon ? &quot;bo qua - khung lon nguoc (&quot; + DoubleToString(eLon,2) + &quot; vs &quot; +
+                     DoubleToString(wLon,2) + &quot;)&quot;
+                   : &quot;bo qua - khong doc duoc khung lon&quot;);
+   if(mohinh == &quot;&quot; &amp;&amp; momNow == 1 &amp;&amp; momTruoc != 1) mohinh = &quot;MH3a&quot;;
+
+   //================= CHIEU BAN ====================================
+   // Tin hieu lay tu KHUNG LON, khong dung bien `cross` cua khung giua.
+   // Toan bo dieu kien nam trong XuLyChieuBan(). Khoi nay khong dung
+   // den bat ky bien nao cua chieu mua -&gt; khong the lam lech chieu mua.
+   if(InpDungChieuBan) XuLyChieuBan(k, rt[j].time);
+
+   if(mohinh == &quot;&quot;) return;
+   if(g_su[k].nL &lt; 1) return;
+
+   if(DemLenhMo(g_su[k].magic) &gt;= InpMaxPositions)
+     { GhiLog(g_su[k].ten, rt[j].time, mohinh, &quot;BUY&quot;, 0, 0, 0, 0, &quot;bo qua - da du lenh&quot;); return; }
+
+   //--- vao lenh MUA
+   double sl  = g_su[k].sL[g_su[k].nL-1].price;     // day swing gan nhat, KHONG dem
+   double ask = SymbolInfoDouble(_Symbol, SYMBOL_ASK);
+   if(ask &lt;= 0 || sl &gt;= ask) return;
+   double r = ask - sl;
+   //--- LOC DAI SL (phat hien tu backtest 2018-2026):
+   //    SL duoi 0.5% gia -&gt; bi quet nhieu, -0.56R/lenh
+   //    SL 0.5-1.5% gia  -&gt; +0.60R/lenh (3.4 SE), duong 8/9 nam
+   //    SL tren 1.5% gia -&gt; gan nhu khong con loi the (+0.09R)
+   double slPct = 100.0 * r / ask;
+   if(InpSLMinPct &gt; 0 &amp;&amp; slPct &lt; InpSLMinPct)
+     { GhiLog(g_su[k].ten, rt[j].time, mohinh, &quot;BUY&quot;, ask, sl, r, 0,
+              &quot;bo qua - SL qua hep &quot; + DoubleToString(slPct,2) + &quot;%&quot;); return; }
+   if(InpSLMaxPct &gt; 0 &amp;&amp; slPct &gt; InpSLMaxPct)
+     { GhiLog(g_su[k].ten, rt[j].time, mohinh, &quot;BUY&quot;, ask, sl, r, 0,
+              &quot;bo qua - SL qua rong &quot; + DoubleToString(slPct,2) + &quot;%&quot;); return; }
+   double minStop = g_stopLevel * _Point;
+   if(minStop &gt; 0 &amp;&amp; r &lt; minStop)
+     { GhiLog(g_su[k].ten, rt[j].time, mohinh, &quot;BUY&quot;, ask, sl, r, 0, &quot;bo qua - SL duoi muc broker&quot;); return; }
+
+   double lot = TinhLot(r);
+   if(lot &lt;= 0)
+     {
+      //--- rui ro tinh theo % muon nho hon lot toi thieu cua san.
+      //    Chi nhan lenh neu lot toi thieu van nam trong tran rui ro.
+      double loLotMin = (r / g_tickSize) * g_tickValue * g_lotMin;
+      double tranTien = AccountInfoDouble(ACCOUNT_BALANCE) * InpTranRuiRoPct / 100.0;
+      if(loLotMin &gt; tranTien)
+        {
+         GhiLog(g_su[k].ten, rt[j].time, mohinh, &quot;BUY&quot;, ask, sl, r, 0,
+                &quot;bo qua - lot toi thieu rui ro &quot; + DoubleToString(loLotMin,2) + &quot; USD&quot;); return;
+        }
+      lot = g_lotMin;
+     }
+
+   MqlTradeRequest req; MqlTradeResult res;
+   ZeroMemory(req); ZeroMemory(res);
+   req.action       = TRADE_ACTION_DEAL;
+   req.symbol       = _Symbol;
+   req.volume       = lot;
+   req.type         = ORDER_TYPE_BUY;
+   req.price        = ask;
+   req.sl           = NormalizeDouble(sl, _Digits);
+   req.tp           = 0;
+   req.deviation    = InpSlippage;
+   req.magic        = g_su[k].magic;
+   req.comment      = g_su[k].ten + &quot;_&quot; + mohinh;
+   req.type_filling = LayKieuKhop();
+
+   if(!OrderSend(req, res) ||
+      (res.retcode != TRADE_RETCODE_DONE &amp;&amp; res.retcode != TRADE_RETCODE_PLACED))
+     {
+      GhiLog(g_su[k].ten, rt[j].time, mohinh, &quot;BUY&quot;, ask, sl, r, lot,
+             &quot;loi &quot; + IntegerToString(res.retcode));
+      return;
+     }
+
+   //--- tim ticket vi the vua mo
+   ulong tkThat = res.order;
+   if(!PositionSelectByTicket(tkThat))
+     {
+      tkThat = 0;
+      datetime moiNhat = 0;
+      for(int q = PositionsTotal()-1; q &gt;= 0; q--)
+        {
+         ulong tk = PositionGetTicket(q);
+         if(tk == 0) continue;
+         if(PositionGetString(POSITION_SYMBOL) != _Symbol) continue;
+         if(PositionGetInteger(POSITION_MAGIC) != g_su[k].magic) continue;
+         datetime tt = (datetime)PositionGetInteger(POSITION_TIME);
+         if(tt &gt;= moiNhat) { moiNhat = tt; tkThat = tk; }
+        }
+     }
+
+   double giaVao = (res.price &gt; 0 ? res.price : ask);
+   if(g_su[k].nPos &lt; MAX_POS &amp;&amp; tkThat &gt; 0)
+     {
+      int p = g_su[k].nPos;
+      g_su[k].pos[p].ticket = tkThat;
+      g_su[k].pos[p].tVao   = rt[j].time;
+      g_su[k].pos[p].entry  = giaVao;
+      g_su[k].pos[p].slGoc  = sl;
+      g_su[k].pos[p].st     = 0;
+      g_su[k].pos[p].dinh1  = 0;
+      g_su[k].pos[p].tDinh1 = 0;
+      g_su[k].pos[p].day1   = 0;
+      g_su[k].pos[p].trail  = 0;
+      g_su[k].pos[p].mohinh = mohinh;
+      g_su[k].pos[p].huong  = +1;
+      g_su[k].nPos++;
+     }
+
+   GhiLog(g_su[k].ten, rt[j].time, mohinh, &quot;BUY&quot;, giaVao, sl, r, lot, &quot;mo&quot;);
+  }
+
+//====================== TRAILING ===================================
+// May trang thai giong het ban Python da kiem chung:
+//   st0 -&gt; tim DINH swing dau tien sau khi vao lenh        -&gt; Dinh1
+//   st1 -&gt; tim DAY swing dau tien sau Dinh1                -&gt; Day1, trail = Day1
+//   st2 -&gt; cho gia PHA qua Dinh1                           -&gt; bat trailing
+//   st3 -&gt; moi day swing moi cao hon trail va thap hon gia -&gt; doi trail len
+// Chi khi st = 3 moi dat SL = trail (truoc do giu SL goc).
+void CapNhatTrailTheoNen(const int k, const double nenHigh, const double nenClose)
+  {
+   DonDepLenh(k, true);
+
+   for(int p = 0; p &lt; g_su[k].nPos; p++)
+     {
+      if(g_su[k].pos[p].huong != +1) continue;      // lenh ban co ham rieng
+      if(g_su[k].pos[p].st == 0)
+        {
+         for(int i = 0; i &lt; g_su[k].nH; i++)
+            if(g_su[k].sH[i].time &gt; g_su[k].pos[p].tVao)
+              {
+               g_su[k].pos[p].dinh1  = g_su[k].sH[i].price;
+               g_su[k].pos[p].tDinh1 = g_su[k].sH[i].time;
+               g_su[k].pos[p].st     = 1;
+               break;
+              }
+        }
+      if(g_su[k].pos[p].st == 1)
+        {
+         for(int i = 0; i &lt; g_su[k].nL; i++)
+            if(g_su[k].sL[i].time &gt; g_su[k].pos[p].tDinh1)
+              {
+               g_su[k].pos[p].day1  = g_su[k].sL[i].price;
+               g_su[k].pos[p].trail = g_su[k].sL[i].price;
+               g_su[k].pos[p].st    = 2;
+               break;
+              }
+        }
+      if(g_su[k].pos[p].st == 2)
+        {
+         if(nenHigh &gt; g_su[k].pos[p].dinh1) g_su[k].pos[p].st = 3;
+        }
+      if(g_su[k].pos[p].st == 3)
+        {
+         for(int i = 0; i &lt; g_su[k].nL; i++)
+           {
+            if(g_su[k].sL[i].time &lt;= g_su[k].pos[p].tDinh1) continue;
+            double pr = g_su[k].sL[i].price;
+            if(pr &gt; g_su[k].pos[p].trail &amp;&amp; pr &lt; nenClose) g_su[k].pos[p].trail = pr;
+           }
+         DatSL(g_su[k].pos[p].ticket, g_su[k].pos[p].trail);
+        }
+     }
+  }
+
+// Bo cac lenh da dong ra khoi danh sach theo doi
+void DonDepLenh(const int k, const bool ghiLog)
+  {
+   for(int p = g_su[k].nPos - 1; p &gt;= 0; p--)
+     {
+      if(LenhConSong(g_su[k].pos[p].ticket)) continue;
+      if(ghiLog)
+         GhiLog(g_su[k].ten, g_su[k].pos[p].tVao, g_su[k].pos[p].mohinh,
+                (g_su[k].pos[p].huong == -1 ? &quot;SELL&quot; : &quot;BUY&quot;),
+                g_su[k].pos[p].entry, g_su[k].pos[p].slGoc, 0, 0, &quot;dong&quot;);
+      for(int q = p; q &lt; g_su[k].nPos-1; q++) g_su[k].pos[q] = g_su[k].pos[q+1];
+      g_su[k].nPos--;
+     }
+  }
+
+void DatSL(const ulong ticket, const double slMoi)
+  {
+   if(!PositionSelectByTicket(ticket)) return;
+   double slHienTai = PositionGetDouble(POSITION_SL);
+   double sl = NormalizeDouble(slMoi, _Digits);
+   if(sl &lt;= slHienTai) return;                       // chi doi len
+   double bid = SymbolInfoDouble(_Symbol, SYMBOL_BID);
+   double minStop = g_stopLevel * _Point;
+   if(bid - sl &lt; minStop) return;                    // qua sat gia, broker tu choi
+
+   MqlTradeRequest req; MqlTradeResult res;
+   ZeroMemory(req); ZeroMemory(res);
+   req.action   = TRADE_ACTION_SLTP;
+   req.symbol   = _Symbol;
+   req.position = ticket;
+   req.sl       = sl;
+   req.tp       = 0;
+   OrderSend(req, res);
+  }
+
+
+//====================== VAO LENH BAN ===============================
+// Dieu kien tin hieu + che do da duoc XuLyChieuBan() kiem tra xong.
+// Ham nay chi lo phan dat lenh: SL, dai SL, khoi luong, gui lenh.
+// Dung MAGIC RIENG va HAN MUC RIENG -&gt; khong bao gio chiem cho cua
+// lenh mua (day la loi nghiem trong cua v2.5).
+void VaoLenhBan(const int k, const datetime tNen)
+  {
+   if(DemLenhMo(g_su[k].magicBan) &gt;= InpBanMaxPositions)
+     { GhiLog(g_su[k].ten, tNen, &quot;BAN_LON&quot;, &quot;SELL&quot;, 0, 0, 0, 0,
+              &quot;bo qua - da du lenh ban&quot;); return; }
+
+   double sl  = g_su[k].sH[g_su[k].nH-1].price;    // dinh swing gan nhat khung giua
+   double bid = SymbolInfoDouble(_Symbol, SYMBOL_BID);
+   if(bid &lt;= 0 || sl &lt;= bid) return;
+   double r = sl - bid;
+   double slPct = 100.0 * r / bid;
+   if(InpBanSLMinPct &gt; 0 &amp;&amp; slPct &lt; InpBanSLMinPct)
+     { GhiLog(g_su[k].ten, tNen, &quot;BAN_LON&quot;, &quot;SELL&quot;, bid, sl, r, 0,
+              &quot;bo qua - SL qua hep &quot; + DoubleToString(slPct,2) + &quot;%&quot;); return; }
+   if(InpBanSLMaxPct &gt; 0 &amp;&amp; slPct &gt; InpBanSLMaxPct)
+     { GhiLog(g_su[k].ten, tNen, &quot;BAN_LON&quot;, &quot;SELL&quot;, bid, sl, r, 0,
+              &quot;bo qua - SL qua rong &quot; + DoubleToString(slPct,2) + &quot;%&quot;); return; }
+   double minStop = g_stopLevel * _Point;
+   if(minStop &gt; 0 &amp;&amp; r &lt; minStop) return;
+
+   double lot = TinhLotVoiRuiRo(r, InpBanRiskPercent);
+   if(lot &lt;= 0)
+     {
+      double loLotMin = (r / g_tickSize) * g_tickValue * g_lotMin;
+      double tranTien = AccountInfoDouble(ACCOUNT_BALANCE) * InpTranRuiRoPct / 100.0;
+      if(loLotMin &gt; tranTien)
+        { GhiLog(g_su[k].ten, tNen, &quot;BAN_LON&quot;, &quot;SELL&quot;, bid, sl, r, 0,
+                 &quot;bo qua - lot toi thieu rui ro &quot; + DoubleToString(loLotMin,2) + &quot; USD&quot;); return; }
+      lot = g_lotMin;
+     }
+
+   MqlTradeRequest req; MqlTradeResult res;
+   ZeroMemory(req); ZeroMemory(res);
+   req.action       = TRADE_ACTION_DEAL;
+   req.symbol       = _Symbol;
+   req.volume       = lot;
+   req.type         = ORDER_TYPE_SELL;
+   req.price        = bid;
+   req.sl           = NormalizeDouble(sl, _Digits);
+   req.tp           = 0;
+   req.deviation    = InpSlippage;
+   req.magic        = g_su[k].magicBan;
+   req.comment      = g_su[k].ten + &quot;_BAN_LON&quot;;
+   req.type_filling = LayKieuKhop();
+
+   if(!OrderSend(req, res) ||
+      (res.retcode != TRADE_RETCODE_DONE &amp;&amp; res.retcode != TRADE_RETCODE_PLACED))
+     { GhiLog(g_su[k].ten, tNen, &quot;BAN_LON&quot;, &quot;SELL&quot;, bid, sl, r, lot,
+              &quot;loi &quot; + IntegerToString(res.retcode)); return; }
+
+   ulong tk = res.order;
+   if(!PositionSelectByTicket(tk))
+     {
+      tk = 0; datetime moiNhat = 0;
+      for(int q = PositionsTotal()-1; q &gt;= 0; q--)
+        {
+         ulong t2 = PositionGetTicket(q);
+         if(t2 == 0) continue;
+         if(PositionGetString(POSITION_SYMBOL) != _Symbol) continue;
+         if(PositionGetInteger(POSITION_MAGIC) != g_su[k].magicBan) continue;
+         datetime tt = (datetime)PositionGetInteger(POSITION_TIME);
+         if(tt &gt;= moiNhat) { moiNhat = tt; tk = t2; }
+        }
+     }
+   double giaVao = (res.price &gt; 0 ? res.price : bid);
+   if(g_su[k].nPos &lt; MAX_POS &amp;&amp; tk &gt; 0)
+     {
+      int p = g_su[k].nPos;
+      g_su[k].pos[p].ticket = tk;
+      g_su[k].pos[p].tVao   = tNen;
+      g_su[k].pos[p].entry  = giaVao;
+      g_su[k].pos[p].slGoc  = sl;
+      g_su[k].pos[p].st     = 0;
+      g_su[k].pos[p].dinh1  = 0;
+      g_su[k].pos[p].tDinh1 = 0;
+      g_su[k].pos[p].day1   = 0;
+      g_su[k].pos[p].trail  = 0;
+      g_su[k].pos[p].mohinh = &quot;BAN_LON&quot;;
+      g_su[k].pos[p].huong  = -1;
+      g_su[k].nPos++;
+     }
+   GhiLog(g_su[k].ten, tNen, &quot;BAN_LON&quot;, &quot;SELL&quot;, giaVao, sl, r, lot, &quot;mo&quot;);
+  }
+
+//====================== TRAILING CHIEU BAN =========================
+// Khac han chieu mua: KHONG doi chuoi Day1 -&gt; Dinh1 -&gt; pha Day1.
+// Chi can lai du InpBanBatTrailR lan R la bat trailing ngay, lay dinh
+// swing gan nhat nam TREN gia dong cua lam muc doi SL.
+void CapNhatTrailBan(const int k, const double nenHigh, const double nenLow, const double nenClose)
+  {
+   for(int p = 0; p &lt; g_su[k].nPos; p++)
+     {
+      if(g_su[k].pos[p].huong != -1) continue;
+      double e = g_su[k].pos[p].entry;
+      double r = g_su[k].pos[p].slGoc - e;
+      if(r &lt;= 0) continue;
+      double lai = (e - nenLow) / r;                  // da lai bao nhieu R
+      if(lai &lt; InpBanBatTrailR) continue;
+
+      for(int i = 0; i &lt; g_su[k].nH; i++)
+        {
+         if(g_su[k].sH[i].time &lt;= g_su[k].pos[p].tVao) continue;
+         double pr = g_su[k].sH[i].price;
+         if(pr &lt;= nenClose) continue;
+         if(g_su[k].pos[p].trail == 0 || pr &lt; g_su[k].pos[p].trail)
+            g_su[k].pos[p].trail = pr;
+        }
+      if(g_su[k].pos[p].trail &gt; 0) DatSLBan(g_su[k].pos[p].ticket, g_su[k].pos[p].trail);
+     }
+  }
+
+void DatSLBan(const ulong ticket, const double slMoi)
+  {
+   if(!PositionSelectByTicket(ticket)) return;
+   double slHienTai = PositionGetDouble(POSITION_SL);
+   double sl = NormalizeDouble(slMoi, _Digits);
+   if(slHienTai &gt; 0 &amp;&amp; sl &gt;= slHienTai) return;       // chi doi XUONG
+   double ask = SymbolInfoDouble(_Symbol, SYMBOL_ASK);
+   double minStop = g_stopLevel * _Point;
+   if(sl - ask &lt; minStop) return;
+
+   MqlTradeRequest req; MqlTradeResult res;
+   ZeroMemory(req); ZeroMemory(res);
+   req.action   = TRADE_ACTION_SLTP;
+   req.symbol   = _Symbol;
+   req.position = ticket;
+   req.sl       = sl;
+   req.tp       = 0;
+   OrderSend(req, res);
+  }
+
+//====================== VONG LAP ===================================
+void OnTick()
+  {
+   for(int k = 0; k &lt; 2; k++) XuLySetup(k);
+  }
+//+------------------------------------------------------------------+
+</code></pre>
+
+</div>
+
+<script>
+document.getElementById('btnCopy').addEventListener('click', function () {
+  var btn = this;
+  var txt = document.getElementById('code').innerText;
+  function done() {
+    btn.textContent = 'Da copy!'; btn.classList.add('done');
+    setTimeout(function () { btn.textContent = 'Copy toan bo code'; btn.classList.remove('done'); }, 2000);
+  }
+  function fallback() {
+    var ta = document.createElement('textarea');
+    ta.value = txt; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); done(); } catch (e) { btn.textContent='Khong copy duoc'; }
+    document.body.removeChild(ta);
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(txt).then(done, fallback);
+  } else { fallback(); }
+});
+</script>
+
+</body></html>
