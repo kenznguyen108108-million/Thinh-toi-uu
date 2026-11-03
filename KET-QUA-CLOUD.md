@@ -68,3 +68,24 @@ Script `scripts/viec2_ra_mua.py`. Bối cảnh lấy từ nến D1/H4 đã đón
 | bỏ MUA khi phe D1 giảm | +177 (19%) | +427 (29%) | +328 (22%) | +1334 (19%) | +3213 (21%) | +5479 | 71.043 (29%) | 344 |
 | bỏ MUA khi giá cách EMA20 D1 > 8% | +237 (26%) | +670 (32%) | +953 (24%) | +496 (29%) | +2998 (25%) | +5354 | 87.581 (33%) | 444 |
 **Kết luận việc 2: BỎ (không đưa vào MỐC).** Không bộ lọc nào hơn MỐC-1 một cách bền: "RSI D1 < 40" lãi kép cao hơn (110k) nhưng lân cận < 45 / < 50 lại kém hơn mốc (78k / 41k) → điểm may; kém mốc năm 2022 và 2024. "Chỉ MUA khi RSI D1 45–60" **giảm sụt vốn ở cả 5 năm** (16–28% so với 25–33%), lãi kép ngang (92,5k), nhưng cắt 46% số lệnh, kém năm 2022/2024, lân cận 45–65 kém mốc → để làm **phương án phòng thủ** nếu anh ưu tiên sụt thấp, chưa phải bản chính. Điểm yếu MUA H1 năm 2022 là "thua đúng luật" trong năm sập (không phải vào trễ / SL hẹp) → không sửa bằng lọc đơn giản được; phần BÁN H1 đã bù năm đó.
+
+## Việc 3 — Độ bền ngưỡng chất lượng (MỐC-1)
+Script `scripts/viec3_nguong.py`.
+**A. Tỉ lệ giữ (ngưỡng đặt trên lệnh 2022–23, mô hình điểm học trước 2024 như MỐC):**
+| Giữ | 2022 | 2023 | 2024 | 2025 | 2026 | Cộng 5 năm | Lãi kép 500 từ 2022 (sụt) | Lệnh |
+|---|---|---|---|---|---|---|---|---|
+| top 20% | **−136** (37%) | +221 (39%) | +1013 (21%) | +284 (27%) | +2543 (16%) | +3925 | 16.471 (46%) | 341 |
+| top 25% | **−172** (40%) | +286 (30%) | +927 (26%) | +227 (29%) | +2502 (20%) | +3770 | 12.893 (45%) | 432 |
+| **top 30% (MỐC-1)** | +256 (27%) | +446 (33%) | +884 (25%) | +750 (29%) | +2865 (25%) | +5201 | **90.792 (33%)** | 491 |
+| top 35% | +311 (31%) | +130 (48%) | +817 (27%) | +676 (36%) | +6469 (24%) | +8403 | 123.157 (**49%**) | 564 |
+| top 40% | +241 (33%) | +52 (56%) | +733 (30%) | +519 (36%) | +4971 (29%) | +6516 | 64.695 (57%) | 632 |
+| top 50% | +55 (38%) | +47 (62%) | +691 (40%) | +197 (52%) | +5082 (34%) | +6072 | 30.226 (64%) | 785 |
+**B. Walk-forward thật (mỗi năm Y học lại mô hình điểm trên dữ liệu < Y và đặt ngưỡng trên lệnh 2022…Y−1; 2022 không có năm trước nên không tính):**
+| Bản | 2023 | 2024 | 2025 | 2026 | Cộng 4 năm | Lãi kép 500 từ 2023 (sụt) | Lệnh |
+|---|---|---|---|---|---|---|---|
+| WF top 25% | +73 (48%) | +927 (26%) | +70 (33%) | +2417 (26%) | +3487 | 10.057 (48%) | 398 |
+| WF top 30% | +46 (**58%**) | +884 (25%) | +51 (34%) | +3062 (21%) | +4043 | 10.069 (58%) | 457 |
+| WF top 35% | +205 (49%) | +817 (27%) | +25 (43%) | +5286 (19%) | +6333 | 19.844 (49%) | 526 |
+| MỐC-1 (ngưỡng cố định) | +446 (33%) | +884 (25%) | +750 (29%) | +2865 (25%) | +4945 | 55.320 (33%) | 410 |
+| Không lọc điểm (tất cả) | +42 (69%) | +1632 (42%) | +59 (58%) | +2311 (43%) | +4044 | 13.559 (69%) | 1236 |
+**Kết luận việc 3 (mặt xấu quan trọng):** ngưỡng chất lượng **KHÔNG bền**. Đổi top 30% → 25% làm 2022 từ lãi thành lỗ; 35% lãi nhiều hơn nhưng sụt 49%. Khi làm walk-forward thật, năm 2023 chỉ +46 USD với sụt 58% (MỐC +446 / 33%) và 2025 chỉ +51 (MỐC +750) → **kết quả đẹp của MỐC ở 2023 có phần do mô hình điểm đã học trên chính năm 2023** (học trước 2024), và năm 2025 nhạy với ngưỡng. Kỳ vọng thực tế nên lấy theo dòng WF: lãi kép từ 2023 ~10.000 USD với sụt ~58%, không phải 55.000 / 33%. Lọc điểm vẫn giảm sụt so với không lọc (58% so với 69%) nhưng lợi nhuận tương đương. **Không đổi MỐC** (giữ top 30% cố định để so các việc sau), nhưng **không nên tin con số lãi kép của MỐC** khi quyết định tiền thật; nếu chạy thật nên cân nhắc rủi ro thấp hơn 3%.
