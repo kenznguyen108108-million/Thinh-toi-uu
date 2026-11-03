@@ -125,3 +125,15 @@ Script `scripts/viec5_bien_dong.py` (thêm hệ số rủi ro riêng từng lệ
 | nghỉ khi ATR% > 8% | +361 (24%) | +446 | +888 | +603 (32%) | +2865 | +5163 | 104.445 (35%) | 470 |
 | rủi ro ½ khi ATR% > 9% | +332 (25%) | +446 | +884 | +792 (26%) | +2865 | +5319 | 107.498 (33%) | 491 |
 → Hướng đúng (lân cận 7/8/9% đều ≥ mốc về tiền, đúng ý "bảo vệ tài khoản khi thị trường khùng") nhưng **tác động nhỏ** (chỉ chạm vài lệnh năm 2022/2025, +2…+18% lãi kép) và sụt lãi kép ở ngưỡng 8% lại tăng 33 → 35% → **chưa đưa vào MỐC** (nằm trong nhiễu); ghi lại làm ứng viên phòng thủ.
+
+## Việc 6 — Áp hệ cho BTC (cùng luật) + tương quan lỗ với ETH
+Script `scripts/viec6_btc.py`. BTC dùng đúng luật MỐC-1, ngưỡng top 30% đặt trên lệnh BTC 2022–23 (cùng cách), lot min 0,01 BTC.
+| Bản | 2022 | 2023 | 2024 | 2025 | 2026 | Cộng 5 năm | Lãi kép 500 từ 2022 (sụt) | Lệnh |
+|---|---|---|---|---|---|---|---|---|
+| ETH MỐC-1 | +256 (27%) | +446 (33%) | +884 (25%) | +750 (29%) | +2865 (25%) | +5201 | 90.792 (33%) | 491 |
+| **BTC MỐC-1 (top 30%)** | −48 (42%) | +95 (**58%**) | +1741 (38%) | −14 (28%) | +27 (44%) | +1801 | 2.639 (**58%**) | 509 |
+| BTC MỐC vòng 30 | −10 (34%) | +517 (43%) | +1174 (39%) | +42 (26%) | +42 (41%) | +1765 | 6.522 (45%) | 476 |
+| BTC MỐC-1 top 50% | −166 (54%) | +57 (63%) | +2100 (37%) | +587 (39%) | +603 (24%) | +3181 | 7.217 (62%) | 786 |
+| BTC MỐC-1 không lọc điểm | +120 (57%) | +149 (76%) | +2026 (59%) | −59 (71%) | +770 (37%) | +3006 | 8.244 (85%) | 1500 |
+**Tương quan theo tháng 2022→nay (59 tháng, % vốn theo R, không lãi kép):** hệ số **+0,61**; ETH 28 tháng âm, BTC 30, **cùng âm 18 tháng** (nếu độc lập ~14). Tháng tệ nhất: ETH −22,6%, BTC −27,1%, gộp 50/50 −22,7% (không đỡ). Ví dụ 06/2024 ETH −20% / BTC −25%; 12/2025 −13% / −21%; 08/2023 −14% / −19%.
+**Kết luận việc 6: BỎ (không chạy hệ này cho BTC).** Trên BTC hệ chỉ lãi nhờ 1 năm 2024, sụt 42–58%, 2022/2025 lỗ; luật MUA mới của việc 1 còn làm BTC kém hơn bản vòng 30 (lãi kép 2,6k so với 6,5k) → luật việc 1 là đặc thù ETH, không phải quy luật chung (mặt xấu cho độ tin cậy của việc 1). Tương quan lỗ cao (+0,61) nên ghép BTC không giúp giảm rủi ro cho tài khoản; bot A (EMA, BTC) vẫn là hệ cho BTC.
