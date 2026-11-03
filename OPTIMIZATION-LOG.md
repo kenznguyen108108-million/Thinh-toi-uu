@@ -761,3 +761,9 @@ Tất cả tín hiệu (chưa lọc): MUA H1 +0,09R/lệnh, MUA M15 +0,09, MUA H
 | **Bỏ BÁN M15** | +327 | **+233** | +334 | **+278** | +2260 | **22.240 USD, sụt 38%** |
 | Bỏ MUA H4 | +322 | +143 | +528 | +85 | +1488 | 12.591 USD |
 Kết luận: **bỏ BÁN M15** (hơn ở 2023, 2025, lãi kép, sụt thấp hơn; kém ở 2024, 2026). Giữ MUA H4 dù ít lệnh (bỏ thì mất lệnh lớn). Luật MUA còn yếu ở MUA H1 năm 2022 (−0,17R/lệnh) và MUA H4 2022–24.
+
+## Vòng 31 (03/11/2026, phiên cloud) — Việc 1–7 theo `VIEC-CLOUD.md`
+Chi tiết + bảng số: `KET-QUA-CLOUD.md`. Script: `scripts/moc.py` (MỐC chung), `scripts/viec1_mua_dakhung.py`, `viec1b_ghep.py`, `viec2_ra_mua.py`, `viec3_nguong.py`, `viec4_phi.py`, `viec5_bien_dong.py`, `viec6_btc.py`.
+- **Giữ:** MUA H1 khi H4 vừa cắt lên (K2, vào RSI H1 cắt 55, gồng đáy 40) → MỐC-1: lãi kép 500 từ 2022 → 90.792 USD (sụt 33%), MỐC vòng 30 chạy lại 23.250 (34%).
+- **Bỏ:** lọc MUA theo RSI D1/phe D1; lọc biến động thấp; áp cho BTC (tương quan tháng +0,61).
+- **Mặt xấu:** ngưỡng top 30% không bền; walk-forward thật từ 2023 chỉ ~10.000 USD, sụt 58%. Phí 0,1% làm lãi kép giảm ~3,5 lần. Vàng PAXG chưa làm (mạng cloud chặn Binance).

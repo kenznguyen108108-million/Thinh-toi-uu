@@ -1,7 +1,14 @@
 # KẾT QUẢ PHIÊN CLOUD (03/11/2026) — hệ B (ETH, RSI)
 
 ## TÓM TẮT
-(viết khi xong các việc)
+1. **GIỮ — Việc 1:** thêm MUA H1 khi H4 vừa có EMA9(RSI) cắt LÊN WMA45 (K2, không đòi dốc), vào lúc RSI H1 cắt lên 55, gồng theo đáy 40 nến (chọn trên 2018–21). MỐC-1: cộng 5 năm +5.201 USD so với +3.492; lãi kép 500 → 90.792 USD (sụt 33%) so với 23.250 (34%); hơn 4/5 năm, 2022 hoà. Lân cận đều hơn mốc. Xấu: chỉ thêm 32 lệnh/5 năm, không sửa được MUA 2022, không áp được cho BTC.
+2. **BỎ — Việc 2:** lọc MUA theo RSI D1 / phe D1 / khoảng cách EMA20 không bền. "Chỉ MUA khi RSI D1 45–60" giảm sụt cả 5 năm (16–28%) với lãi kép ngang → để làm phương án phòng thủ, chưa phải bản chính.
+3. **Cảnh báo — Việc 3:** ngưỡng top 30% KHÔNG bền (25% → 2022 lỗ; 35% → sụt 49%). Walk-forward thật: lãi kép từ 2023 chỉ ~10.000 USD, sụt ~58% (MỐC báo 55.000 / 33%) → con số đẹp của MỐC có phần do mô hình điểm đã học trên 2023. Không nên tin lãi kép MỐC khi quyết định tiền thật.
+4. **Việc 4:** phí 0,10–0,15% vẫn lãi (+3.830…+4.288 / 5 năm) nhưng lãi kép giảm ~3,5 lần, sụt 44–45%, 2022 lỗ. Cần đo phí + spread thật.
+5. **BỎ — Việc 5:** nghỉ / giảm rủi ro khi biến động thấp làm kém mốc ở mọi ngưỡng (biến động thấp = nén trước sóng lớn 8/2026). Chiều ngược lại (rủi ro ½ khi ATR% D1 > 8%) hơn nhẹ +2…+18% nhưng nằm trong nhiễu → ứng viên, chưa đưa vào.
+6. **BỎ — Việc 6:** BTC cùng luật: lãi nhờ mỗi 2024, sụt 58%; tương quan tháng với ETH +0,61 (cùng âm 18/59 tháng) → không ghép.
+7. **Chưa làm — Việc 7:** mạng cloud chặn Binance, không tải được PAXG.
+→ Bản tốt nhất hiện tại = **MỐC-1** (`scripts/moc.py`, `xay(..., them_mua=True)` + `chon()`). Kỳ vọng thật nên lấy theo walk-forward, cân nhắc rủi ro < 3%/lệnh.
 
 ## Cách so
 - Script chung `scripts/moc.py`: dựng MỐC vòng 30 (MUA H1 RSI 55 + MUA H4 lọc D1 + MUA M15 MH3a + BÁN H1 khi H4 vừa cắt xuống, top 30% điểm, rủi ro 3%, trần lot min 6%, thua 3 nghỉ 8h), đánh giá bằng `von500.mo_phong`: mỗi năm 500 USD (lãi, sụt) + lãi kép 500 từ 01/2022.
@@ -137,3 +144,6 @@ Script `scripts/viec6_btc.py`. BTC dùng đúng luật MỐC-1, ngưỡng top 30
 | BTC MỐC-1 không lọc điểm | +120 (57%) | +149 (76%) | +2026 (59%) | −59 (71%) | +770 (37%) | +3006 | 8.244 (85%) | 1500 |
 **Tương quan theo tháng 2022→nay (59 tháng, % vốn theo R, không lãi kép):** hệ số **+0,61**; ETH 28 tháng âm, BTC 30, **cùng âm 18 tháng** (nếu độc lập ~14). Tháng tệ nhất: ETH −22,6%, BTC −27,1%, gộp 50/50 −22,7% (không đỡ). Ví dụ 06/2024 ETH −20% / BTC −25%; 12/2025 −13% / −21%; 08/2023 −14% / −19%.
 **Kết luận việc 6: BỎ (không chạy hệ này cho BTC).** Trên BTC hệ chỉ lãi nhờ 1 năm 2024, sụt 42–58%, 2022/2025 lỗ; luật MUA mới của việc 1 còn làm BTC kém hơn bản vòng 30 (lãi kép 2,6k so với 6,5k) → luật việc 1 là đặc thù ETH, không phải quy luật chung (mặt xấu cho độ tin cậy của việc 1). Tương quan lỗ cao (+0,61) nên ghép BTC không giúp giảm rủi ro cho tài khoản; bot A (EMA, BTC) vẫn là hệ cho BTC.
+
+## Việc 7 — Vàng PAXGUSDT: CHƯA LÀM ĐƯỢC
+Chính sách mạng của môi trường cloud chặn `api.binance.com` (cả `data-api.binance.vision`, `api1.binance.com`) → proxy trả 403, không tải được dữ liệu. Không có số liệu, không làm giả. Muốn làm: mở Network access trong cài đặt môi trường cloud (thêm `api.binance.com` vào Allowed domains), hoặc anh tải trên máy bằng `python3 -I scripts/dl_dai.py PAXGUSDT 1h 1514764800000 data/PAXG_1h.csv` (và 4h, 1d; 15m từ 1640995200000) rồi chạy `python3 -I scripts/moc.py data PAXG` (cần thêm lot vàng vào `LOT` trong `scripts/von500.py`).
